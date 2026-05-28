@@ -14,6 +14,7 @@ int main(int ac, char **av)
             add_history(line);
         free(line); 
     }
+    dfoiefnzaouefns
     rl_clear_history();
     return 0;
 }
