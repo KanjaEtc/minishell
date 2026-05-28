@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+#include "minishell.h"
 
 int main(int ac, char **av)
 {
@@ -10,13 +7,14 @@ int main(int ac, char **av)
 
     while (1)
     {
-        line = readline("Minishell prompt> ");
+        line = readline("minishell> ");
         if (!line)
-            break;
+            break; 
         if (line && *line)
             add_history(line);
         free(line); 
     }
+    rl_clear_history();
     return 0;
 }
 
