@@ -1,45 +1,84 @@
 #include "minishell.h"
 
-t_token	*ft_token_new(char *val, t_type type)
+static void	handle_lexer_operators(char *line, int *i, int *start, t_token **token_list)
 {
-	t_token *new;
-
-	new = malloc(sizeof(t_token));
-	if (!new)
-		return (NULL);
-	new->value = val;
-	new->type = type;
-	new->next = NULL;
-	return (new);
-}
-
-void	add_token_back(t_token **list, t_token *new_token)
-{
-	t_token *last;
-
-	if (!new_token)
-		return;
-	if (!list)
+	char	*curr_word;
+	
+	if (*i > *start)
 	{
-		*list = new_token;
-		return;
+		curr_word = ft_substr(line, *start, *i - *start);
+		add_token_back(token_list, ft_token_new(curr_word, WORD));
 	}
-	last = *list;
-	while (last->next)
-		last = last->next;
-	last->next = new_token;
+	if ((line[*i] == '<' && line[*i + 1] == '<') || (line[*i] == '>' && line[*i + 1] == '>'))
+	{
+		curr_word = ft_substr(line, *i, 2);
+		add_token_back(token_list, ft_token_new(curr_word, WORD));
+		(*i)++;
+	}
+	else
+	{
+		curr_word = ft_substr(line, *i, 1);
+		add_token_back(token_list, ft_token_new(curr_word, WORD));
+	}
+	*start = *i + 1;
 }
 
-void	free_token(t_token **list)
+t_token	*lexer(char *line)
 {
-	t_token	*tmp;
+	t_token	*token_list;
+	char	*curr_word;
+	int		status;
+	int		start;
+	int		i;
 
-	if (!list || !*list)
-		return ;
-	while (*list)
+	i = 0;
+	start = 0;
+	status = 0;
+	token_list = NULL;
+	while (line[i])
 	{
-		tmp = (*list)->next;
-		free(*list);
-		*list = tmp;
+		status = update_quote_status(line[i], status);
+		if (status == 0)
+		{
+			if (line[i] == ' ' || line[i] == '\t')
+			{
+				if (i > start)
+				{
+					curr_word = ft_substr(line, start, i - start);
+					add_token_back(&token_list,ft_token_new(curr_word, WORD));
+				}
+				start = i + 1;
+			}
+			else if (line[i] == '|' || line[i] == '<' || line[i] == '>')
+				handle_lexer_operators(line, &i, &start, &token_list);
+		}
+		i++;
+	}
+	if (line[start] != '\0')
+	{
+		curr_word = ft_substr(line, start, i - start);
+		add_token_back(&token_list, ft_token_new(curr_word, WORD));
+	}
+	return (token_list);
+}
+
+void	assign_token_types(t_token *token_list)
+{
+	t_token *current;
+
+	current = token_list;
+	while (current)
+	{
+		if (ft_strcmp(current->value, "|") == 0)
+			current->type = PIPE;
+		else if (ft_strcmp(current->value, "<") == 0)
+			current->type = RED_IN;
+		else if (ft_strcmp(current->value, ">") == 0)
+			current->type = RED_OUT;
+		else if (ft_strcmp(current->value, "<<") == 0)
+			current->type = HEREDOC;
+		else if (ft_strcmp(current->value, ">>") == 0)
+			current->type = APPEND;
+		current = current->next;
 	}
 }

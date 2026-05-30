@@ -7,5 +7,37 @@
 #include <readline/history.h>
 #include <unistd.h>
 #include <signal.h>
+#include "libft/libft.h"
+
+typedef enum e_token_type
+{
+	WORD,
+	PIPE,
+	RED_IN,
+	RED_OUT,
+	APPEND,
+	HEREDOC,
+}	t_type;
+
+typedef struct s_token
+{
+	char	*value;
+	t_type		type;
+	struct s_token *next;
+}	t_token;
+
+/*************TOKEN**********************/
+t_token	*lexer(char *line);
+void	assign_token_types(t_token *token_list);
+
+
+/*************TOKEN_UTILS****************/
+t_token	*ft_token_new(char *val, t_type type);
+void	add_token_back(t_token **list, t_token *new_token);
+void	free_token(t_token **list);
+
+/*************LEXER_UTILS****************/
+int	update_quote_status(char c, int curr_status);
+int	unclosed_quote(char *line);
 
 #endif

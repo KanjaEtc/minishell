@@ -12,7 +12,7 @@ int main(int ac, char **av)
             break; 
         if (line && *line)
             add_history(line);
-        free(line); 
+        free(line);
     }
     rl_clear_history();
     return 0;
