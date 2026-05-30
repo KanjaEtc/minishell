@@ -32,9 +32,10 @@ void	assign_token_types(t_token *token_list);
 
 
 /*************TOKEN_UTILS****************/
-t_token	*ft_token_new(char *val, t_type type);
+t_token	*new_token(char *val, t_type type);
 void	add_token_back(t_token **list, t_token *new_token);
 void	free_token(t_token **list);
+int		ft_strcmp(const char *s1,const char *s2);
 
 /*************LEXER_UTILS****************/
 int	update_quote_status(char c, int curr_status);

@@ -38,8 +38,6 @@ int	main(int ac, char **av)
 		printf("\n");
 		tmp = tmp->next;
 	}
-
-	// 4. Nettoyage de la mémoire (si tu as codé ft_free_tokens)
-	// ft_free_tokens(&tokens);
+	free_token(&tokens);
 	return (0);
 }

@@ -7,18 +7,18 @@ static void	handle_lexer_operators(char *line, int *i, int *start, t_token **tok
 	if (*i > *start)
 	{
 		curr_word = ft_substr(line, *start, *i - *start);
-		add_token_back(token_list, ft_token_new(curr_word, WORD));
+		add_token_back(token_list, new_token(curr_word, WORD));
 	}
 	if ((line[*i] == '<' && line[*i + 1] == '<') || (line[*i] == '>' && line[*i + 1] == '>'))
 	{
 		curr_word = ft_substr(line, *i, 2);
-		add_token_back(token_list, ft_token_new(curr_word, WORD));
+		add_token_back(token_list, new_token(curr_word, WORD));
 		(*i)++;
 	}
 	else
 	{
 		curr_word = ft_substr(line, *i, 1);
-		add_token_back(token_list, ft_token_new(curr_word, WORD));
+		add_token_back(token_list, new_token(curr_word, WORD));
 	}
 	*start = *i + 1;
 }
@@ -45,9 +45,11 @@ t_token	*lexer(char *line)
 				if (i > start)
 				{
 					curr_word = ft_substr(line, start, i - start);
-					add_token_back(&token_list,ft_token_new(curr_word, WORD));
+					add_token_back(&token_list,new_token(curr_word, WORD));
 				}
-				start = i + 1;
+				while (line[i] == ' ' || line[i] == '\t')
+					i++;
+				start = i;
 			}
 			else if (line[i] == '|' || line[i] == '<' || line[i] == '>')
 				handle_lexer_operators(line, &i, &start, &token_list);
@@ -57,7 +59,7 @@ t_token	*lexer(char *line)
 	if (line[start] != '\0')
 	{
 		curr_word = ft_substr(line, start, i - start);
-		add_token_back(&token_list, ft_token_new(curr_word, WORD));
+		add_token_back(&token_list, new_token(curr_word, WORD));
 	}
 	return (token_list);
 }
