@@ -7,7 +7,7 @@ void	print_token_type(t_type type)
 	else if (type == PIPE) printf("PIPE");
 	else if (type == RED_IN) printf("RED_IN");
 	else if (type == RED_OUT) printf("RED_OUT");
-	else if (type == HERE_DOC) printf("HERE_DOC"); // Ajuste selon le nom dans ton enum
+	else if (type == HEREDOC) printf("HERE_DOC"); // Ajuste selon le nom dans ton enum
 	else if (type == APPEND) printf("APPEND");
 }
 
