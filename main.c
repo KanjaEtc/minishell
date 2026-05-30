@@ -9,12 +9,21 @@ int main(int ac, char **av)
     {
         line = readline("minishell> ");
         if (!line)
-            break; 
+            break;
         if (line && *line)
             add_history(line);
-        free(line); 
+        free(line);
+        if (unclosed_quote(line))//sers simplement a gerer le cas des quotes non fermees
+        {
+            printf("Error: unclosed quote\n");
+            free(line);
+        }
+        else
+        {
+            t_token *tokens = lexer(line);
+            //suite sera coder plus tard
+        }
     }
-    dfoiefnzaouefns
     rl_clear_history();
     return 0;
 }
