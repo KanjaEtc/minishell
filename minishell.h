@@ -9,6 +9,14 @@
 #include <signal.h>
 #include "libft/libft.h"
 
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
+
 typedef enum e_token_type
 {
 	WORD,
@@ -40,5 +48,9 @@ int		ft_strcmp(const char *s1,const char *s2);
 /*************LEXER_UTILS****************/
 int	update_quote_status(char c, int curr_status);
 int	unclosed_quote(char *line);
+
+/***************ENV_UTILS****************/
+t_env	*create_new_t_env(char *key, char *value);
+void	ft_add_env_back(t_env **list, t_env *new_node);
 
 #endif
