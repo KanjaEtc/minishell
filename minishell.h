@@ -74,4 +74,8 @@ void		expand_tokens(t_token *tokens, t_env *env);
 char		*expand_string(char *str, t_env *env);
 static char	*handle_dollar(char *str, int i, t_env *env);
 
+/***************QUOTE_STRIPPER***********/
+int	get_clean_len(char	*str);
+char	*strip_quotes(char *str);
+
 #endif
