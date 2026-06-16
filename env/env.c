@@ -74,9 +74,12 @@ void *free_env(t_env *env)
     return (NULL);
 }
 
+// a changer en env_start dans le main + fonction pour env -i
 int main(int ac, char **av, char **envp)
 {
     (void)ac; (void)av;
+    if (!envp || envp[0] == NULL)
+        return (1); 
     t_env *env = init_env(envp);
     print_env(env);
     free_env(env);
