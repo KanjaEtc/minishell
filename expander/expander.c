@@ -1,4 +1,6 @@
-#include "minishell.h"
+#include "expand.h"
+#include "../env/env.h"
+
 
 void	expand_tokens(t_token *tokens, t_env *env)
 {

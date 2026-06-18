@@ -15,7 +15,7 @@
 //It returns a pointer to the located character, 
 //or NULL if the character does not appear in the string.
 
-#include "libft.h"
+#include "libft_stripped.h"
 
 char	*ft_strchr(const char *str, int c)
 {

@@ -21,12 +21,7 @@ typedef struct s_status
 	status_type	status;
 }	t_status;
 
-typedef enum e_status_type
-{
-	IN_D_QUOTES,
-	IN_S_QUOTES,
-	NO_QUOTES,
-}	status_type;
+
 
 typedef enum e_token_type
 {

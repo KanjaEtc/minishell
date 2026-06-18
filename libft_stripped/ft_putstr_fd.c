@@ -12,7 +12,7 @@
 
 //This function writes the string s to the file descriptor fd.
 
-#include "libft.h"
+#include "libft_stripped.h"
 
 void	ft_putstr_fd(char *s, int fd)
 {

@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "env.h"
 
 t_env	*create_new_t_env(char *key, char *value)
 {

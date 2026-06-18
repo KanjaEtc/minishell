@@ -13,7 +13,7 @@
 //This function copies n bytes from memory area src to memory area dest.
 //The memory areas must not overlap.
 
-#include "libft.h"
+#include "libft_stripped.h"
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
