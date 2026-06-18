@@ -1,4 +1,5 @@
 #include "../env/env.h" // changer en libft plus tard
+#include "expand.h"
 
 int	is_valid_var_char(char c)
 {

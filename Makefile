@@ -10,6 +10,7 @@ SOURCES = main.c \
 		  env/ft_strdup.c \
 		  env/ft_memcpy.c \
 
+
 OBJECTS = $(SOURCES:.c=.o)
 TARGET = minishell
 

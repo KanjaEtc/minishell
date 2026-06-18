@@ -37,7 +37,10 @@ t_env	*init_env(char **envp)
     {
         node = malloc(sizeof(t_env));
         if (!node)
+        {
+            free_env(head);
             return (NULL);
+        }
         node->next = NULL;
         fill_env(envp[i], node);
         if (!head)
@@ -75,20 +78,20 @@ void *free_env(t_env *env)
 }
 
 // a changer en env_start dans le main + fonction pour env -i
-int main(int ac, char **av, char **envp)
-{
-    (void)ac; 
-    if (!envp || envp[0] == NULL)
-        return (1); 
-    t_env *env = init_env(envp);
-    print_env(env);
-    printf("Adding new env variable: %s\n", av[1]);
-    new_env_var(av[1], &env);
-    printf("--------------------------------------\n");
-    print_env(env);
-    printf("--------------------------------------\n");
-    env_builtin(env);
-    free_env(env);
-    return (0);
-}
+// int main(int ac, char **av, char **envp)
+// {
+//     (void)ac; 
+//     if (!envp || envp[0] == NULL)
+//         return (1); 
+//     t_env *env = init_env(envp);
+//     print_env(env);
+//     printf("Adding new env variable: %s\n", av[1]);
+//     new_env_var(av[1], &env);
+//     printf("--------------------------------------\n");
+//     print_env(env);
+//     printf("--------------------------------------\n");
+//     env_builtin(env);
+//     free_env(env);
+//     return (0);
+// }
  

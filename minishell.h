@@ -16,6 +16,13 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef enum e_status_type
+{
+	IN_D_QUOTES,
+	IN_S_QUOTES,
+	NO_QUOTES,
+}	status_type;
+
 typedef struct s_status
 {
 	status_type	status;
@@ -43,7 +50,7 @@ typedef struct s_token
 /*************LEXER**********************/
 t_token		*lexer(char *line);
 t_token		*new_token(char *val, t_type type);
-static void	handle_lexer_operators(char *line, int *i, int *start, t_token **token_list);
+void		handle_lexer_operators(char *line, int *i, int *start, t_token **token_list);
 void		add_token_back(t_token **list, t_token *new_token);
 void		free_token(t_token **list);
 
@@ -67,7 +74,7 @@ char		*ft_strjoin_three(char *s1, char *s2, char *s3);
 /***************EXPANDER*****************/
 void		expand_tokens(t_token *tokens, t_env *env);
 char		*expand_string(char *str, t_env *env);
-static char	*handle_dollar(char *str, int i, t_env *env);
+char		*handle_dollar(char *str, int i, t_env *env);
 
 /***************QUOTE_STRIPPER***********/
 int	get_clean_len(char	*str);

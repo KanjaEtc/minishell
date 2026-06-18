@@ -1,6 +1,6 @@
 #include "expand.h"
 #include "../env/env.h"
-
+#include "../minishell.h"
 
 void	expand_tokens(t_token *tokens, t_env *env)
 {
@@ -43,17 +43,21 @@ char	*expand_string(char *str, t_env *env)
 	return (str);
 }
 
-static char	*handle_dollar(char *str, int i, t_env *env)
+char	*handle_dollar(char *str, int i, t_env *env)
 {
 	char	*var_name;
 	char	*before;
 	char	*after;
 	char	*new_s;
+	char	*var_value;
 
-	var_name = ft_substr(str, i + 1, get_var_len(&str[i + 1]));
+	var_name = ft_substr(str, i + 1, var_len(&str[i + 1]));
 	before = ft_substr(str, 0, i);
 	after = ft_substr(str, i + 1 + ft_strlen(var_name), ft_strlen(str));
-	new_s = ft_strjoin_three(before, ft_get_env(var_name, env), after);
+	var_value = ft_get_env(var_name, env);
+	if (!var_value)
+		var_value = "";
+	new_s = ft_strjoin_three(before, var_value, after);
 	free(str);
 	free(before);
 	free(after);
