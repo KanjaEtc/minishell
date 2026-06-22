@@ -28,4 +28,7 @@ t_env	*new_env_var(char *arg, t_env **env_list);
 	
 // Env printing (built-in)
 int env_builtin(t_env *env);
+
+// Unset (built-in)
+int unset_builtin(t_env **env, char *key);
 #endif
