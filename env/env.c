@@ -77,20 +77,14 @@ void *free_env(t_env *env)
 // a changer en env_start dans le main + fonction pour env -i
 int main(int ac, char **av, char **envp)
 {
-    (void)ac; 
+    (void)ac, (void)av;
     if (!envp || envp[0] == NULL)
         return (1); 
     t_env *env = init_env(envp);
     print_env(env);
-    printf("Adding new env variable: %s\n", av[1]);
-    new_env_var(av[1], &env);
     printf("--------------------------------------\n");
-    print_env(env);
+    pwd_builtin(env);
     printf("--------------------------------------\n");
-    env_builtin(env);
-    printf("--------------------------------------\n");
-    unset_builtin(&env, "KIMCHI");
-    print_env(env);
     free_env(env);
     return (0);
 }

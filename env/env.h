@@ -31,4 +31,8 @@ int env_builtin(t_env *env);
 
 // Unset (built-in)
 int unset_builtin(t_env **env, char *key);
+
+// PWD (built-in)
+int pwd_builtin(t_env *env);
+
 #endif
