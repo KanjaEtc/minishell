@@ -94,16 +94,4 @@ void	add_token_back(t_token **list, t_token *new_token)
 	last->next = new_token;
 }
 
-void	free_token(t_token **list)
-{
-	t_token	*tmp;
 
-	if (!list || !*list)
-		return ;
-	while (*list)
-	{
-		tmp = (*list)->next;
-		free(*list);
-		*list = tmp;
-	}
-}

@@ -27,16 +27,6 @@ int	unclosed_quote(char *line)
 	return (0);
 }
 
-int	ft_strcmp(const char *s1,const char *s2)
-{
-	size_t	i;
-
-	i = 0;
-	while (s1[i] && s1[i] == s2[i])
-		i++;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-
 void	assign_token_types(t_token *token_list)
 {
 	t_token *current;
@@ -55,5 +45,19 @@ void	assign_token_types(t_token *token_list)
 		else if (ft_strcmp(current->value, ">>") == 0)
 			current->type = APPEND;
 		current = current->next;
+	}
+}
+
+void	free_token(t_token **list)
+{
+	t_token	*tmp;
+
+	if (!list || !*list)
+		return ;
+	while (*list)
+	{
+		tmp = (*list)->next;
+		free(*list);
+		*list = tmp;
 	}
 }

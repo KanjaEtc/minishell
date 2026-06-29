@@ -12,11 +12,11 @@ typedef struct s_env
     struct s_env	*next;
 }	t_env;
 
-// Env functions
-t_env	*fill_env(char *env_str, t_env *env);
-t_env	*init_env(char **envp);
-void	print_env(t_env *env);
-void *free_env(t_env *env);
+// // Env functions
+// t_env	*fill_env(char *env_str, t_env *env);
+// t_env	*init_env(char **envp);
+// void	print_env(t_env *env);
+// void *free_env(t_env *env);
 
 //Utils
 void	ft_add_env_back(t_env **list, t_env *new_node);

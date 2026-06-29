@@ -1,4 +1,4 @@
-#include "../libft_stripped/libft_stripped.h"
+#include "../../includes/libft_stripped/libft_stripped.h"
 int echo_builtin(int argc, char **argv, int option)
 {
     int i;

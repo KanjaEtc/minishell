@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-int g_var = 0;
-
 void handle_sigint(int sig)
 {
     if (sig == SIGINT)
