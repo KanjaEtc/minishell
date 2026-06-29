@@ -1,35 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marotsen <marotsen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/15 03:11:07 by marotsen          #+#    #+#             */
-/*   Updated: 2025/11/15 03:46:37 by marotsen         ###   ########.fr       */
+/*   Created: 2025/11/11 12:45:13 by marotsen          #+#    #+#             */
+/*   Updated: 2025/11/14 19:16:21 by marotsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//This function copies n bytes from memory area src to memory area dest.
-//The memory areas must not overlap.
+//This function locates the first occurrence of c in the string pointed to by str.
 
-#include "libft_stripped.h"
+//It returns a pointer to the located character, 
+//or NULL if the character does not appear in the string.
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+#include "s_libft.h"
+
+char	*ft_strchr(const char *str, int c)
 {
-	unsigned char	*dptr;
-	unsigned char	*sptr;
-	size_t			i;
+	int	i;
 
-	dptr = (unsigned char *)dest;
-	sptr = (unsigned char *)src;
 	i = 0;
-	if (dest == 0 && src == 0)
-		return (dest);
-	while (i < n)
+	while (str[i] != '\0')
 	{
-		dptr[i] = sptr[i];
+		if (str[i] == (unsigned char)c)
+			return ((char *)&str[i]);
 		i++;
 	}
-	return (dest);
+	if (str[i] == ((unsigned char)c))
+		return ((char *)&str[i]);
+	return (NULL);
 }

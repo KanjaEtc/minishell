@@ -8,14 +8,14 @@
 #include <unistd.h>
 #include <signal.h>
 #include "struct.h"
-#include "./libft_stripped/libft_stripped.h"
+#include "../s_libft/s_libft.h"
 
 int g_var = 0;
 
 /*************LEXER*********************/
 t_token		*lexer(char *line);
 t_token		*new_token(char *val, t_type type);
-static void	handle_lexer_operators(char *line, int *i, int *start, t_token **token_list);
+// static void	handle_lexer_operators(char *line, int *i, int *start, t_token **token_list);
 void		add_token_back(t_token **list, t_token *new_token);
 
 /*************LEXER_UTILS***************/
@@ -33,6 +33,7 @@ void		ft_add_env_back(t_env **list, t_env *new_node);
 char		*ft_get_env(char *key, t_env *env_list);
 void	print_env(t_env *env);
 void *free_env(t_env *env);
+char **env_to_envp(t_env *env);
 
 /***************EXPANDER_UTILS***********/
 int			is_valid_var_char(char c);
@@ -41,7 +42,7 @@ int			var_len(char *str);
 /***************EXPANDER*****************/
 void		expand_tokens(t_token *tokens, t_env *env);
 char		*expand_string(char *str, t_env *env);
-static char	*handle_dollar(char *str, int i, t_env *env);
+// static char	*handle_dollar(char *str, int i, t_env *env);
 
 /***************QUOTE_STRIPPER***********/
 int	get_clean_len(char	*str);
@@ -68,5 +69,12 @@ int unset_builtin(t_env **env, char *key);
 /***************SIGNALS****************/
 void handle_sigint(int sig);
 void setup_signals(void);
+
+/**************EXECUTION***************/
+int is_builtin(char *cmd);
+void exec_builtin(t_cmd *cmd, t_env **env);
+int exec_execve(t_cmd *cmd, t_env *env);
+void exec_cmd(t_cmd *cmd, t_env **env);
+char *get_path(char *cmd, t_env *env);
 
 #endif

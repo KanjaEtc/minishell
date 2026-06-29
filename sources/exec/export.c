@@ -1,4 +1,4 @@
-#include "env.h"
+#include "../../includes/minishell.h"
 
 t_env	*new_env_var(char *arg, t_env **env_list)
 {

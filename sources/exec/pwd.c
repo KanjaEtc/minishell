@@ -1,5 +1,4 @@
-#include "env.h"
-#include "../libft_stripped/libft_stripped.h"
+#include "../../includes/minishell.h"
 
 int pwd_builtin(t_env *env)
 {

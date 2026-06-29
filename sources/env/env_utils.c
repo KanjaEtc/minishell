@@ -1,4 +1,4 @@
-#include "env.h"
+#include "../../includes/minishell.h"
 
 t_env	*create_new_t_env(char *key, char *value)
 {
@@ -42,4 +42,29 @@ char	*ft_get_env(char *key, t_env *env_list)
 		current = current->next;
 	}
 	return (NULL);
+}
+
+char **env_to_envp(t_env *env)
+{
+    int count = 0;
+    t_env *current = env;
+    while (current)
+    {
+        count++;
+        current = current->next;
+    }
+
+    char **envp = malloc(sizeof(char *) * (count + 1));
+    if (!envp)
+        return (NULL);
+
+    current = env;
+    for (int i = 0; i < count; i++)
+    {
+        envp[i] = ft_strjoin_three(current->key, "=", current->value);
+        current = current->next;
+    }
+    envp[count] = NULL;
+
+    return (envp);
 }

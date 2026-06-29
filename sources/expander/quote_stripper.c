@@ -1,5 +1,4 @@
-#include "../minishell.h"
-#include "expand.h"
+#include "../../includes/minishell.h"
 
 int	get_clean_len(char	*str)
 {

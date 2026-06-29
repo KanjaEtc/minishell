@@ -1,4 +1,4 @@
-#include "libft_stripped.h"
+#include "s_libft.h"
 
 int	ft_strcmp(const char *s1,const char *s2)
 {

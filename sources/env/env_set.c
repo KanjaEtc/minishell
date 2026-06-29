@@ -1,5 +1,4 @@
-#include "env.h"
-#include "../libft_stripped/libft_stripped.h"
+#include "../../includes/minishell.h"
 
 t_env	*fill_env(char *env_str, t_env *env)
 {

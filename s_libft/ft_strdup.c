@@ -15,7 +15,7 @@
 
 //The memory allocated for the new string should be freed by the caller.
 
-#include "libft_stripped.h"
+#include "s_libft.h"
 
 char	*ft_strcpy(char *dest, char *src)
 {

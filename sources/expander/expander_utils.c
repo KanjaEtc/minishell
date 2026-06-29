@@ -1,5 +1,4 @@
-#include "../env/env.h" // changer en libft plus tard
-#include "expand.h"
+#include "../../includes/minishell.h"
 
 int	is_valid_var_char(char c)
 {

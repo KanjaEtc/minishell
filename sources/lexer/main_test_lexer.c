@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 // Une petite fonction pour afficher le type sous forme de texte lisible
 void	print_token_type(t_type type)
@@ -11,33 +11,33 @@ void	print_token_type(t_type type)
 	else if (type == APPEND) printf("APPEND");
 }
 
-int	main(int ac, char **av)
-{
-	t_token	*tokens;
-	t_token	*tmp;
+// int	main(int ac, char **av)
+// {
+// 	t_token	*tokens;
+// 	t_token	*tmp;
 
-	if (ac != 2)
-	{
-		printf("Usage: ./test_lexer \"ta commande a tester\"\n");
-		return (1);
-	}
-	printf("Ligne brute : %s\n\n", av[1]);
+// 	if (ac != 2)
+// 	{
+// 		printf("Usage: ./test_lexer \"ta commande a tester\"\n");
+// 		return (1);
+// 	}
+// 	printf("Ligne brute : %s\n\n", av[1]);
 	
-	// 1. Lancement de ton lexer
-	tokens = lexer(av[1]);
+// 	// 1. Lancement de ton lexer
+// 	tokens = lexer(av[1]);
 	
-	// 2. Lancement de ton assignation de types
-	assign_token_types(tokens);
+// 	// 2. Lancement de ton assignation de types
+// 	assign_token_types(tokens);
 
-	// 3. Affichage des résultats
-	tmp = tokens;
-	while (tmp)
-	{
-		printf("Token : [%s] \t-> Type : ", tmp->value);
-		print_token_type(tmp->type);
-		printf("\n");
-		tmp = tmp->next;
-	}
-	free_token(&tokens);
-	return (0);
-}
+// 	// 3. Affichage des résultats
+// 	tmp = tokens;
+// 	while (tmp)
+// 	{
+// 		printf("Token : [%s] \t-> Type : ", tmp->value);
+// 		print_token_type(tmp->type);
+// 		printf("\n");
+// 		tmp = tmp->next;
+// 	}
+// 	free_token(&tokens);
+// 	return (0);
+// }

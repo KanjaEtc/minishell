@@ -1,4 +1,4 @@
-#include "../../includes/libft_stripped/libft_stripped.h"
+#include "../../includes/minishell.h"
 int echo_builtin(int argc, char **argv, int option)
 {
     int i;

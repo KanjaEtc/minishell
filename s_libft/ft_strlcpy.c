@@ -13,7 +13,7 @@
 //This function copies up to siz - 1 characters from the string src to dst,
 //null-terminating the result if siz is not 0.
 
-#include "libft_stripped.h"
+#include "s_libft.h"
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t siz)
 {

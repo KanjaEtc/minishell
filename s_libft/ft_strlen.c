@@ -13,7 +13,7 @@
 //This function calculates the length of the string pointed to by str, 
 //excluding the terminating null byte.
 
-#include "libft_stripped.h"
+#include "s_libft.h"
 
 size_t	ft_strlen(const char *str)
 {
