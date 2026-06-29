@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 
 int main(int ac, char **av, char **envp)
 {
@@ -21,13 +21,12 @@ int main(int ac, char **av, char **envp)
             break;
         if (line && *line)
             add_history(line);
-        free(line);
-        // if (unclosed_quote(line))//sers simplement a gerer le cas des quotes non fermees
-        // {
-        //     printf("Error: unclosed quote\n");
-        //     free(line);
-        // }
-        // else
+        if (unclosed_quote(line))//sers simplement a gerer le cas des quotes non fermees
+        {
+            perror("Error: unclosed quote\n");
+            free(line);
+        }
+        //else
         // {
         //     t_token *tokens = lexer(line);
         //     //suite sera coder plus tard

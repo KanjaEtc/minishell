@@ -57,14 +57,14 @@ t_env	*new_env_var(char *arg, t_env **env_list);
 int env_builtin(t_env *env);
 
 // Echo
-int echo_builtin(int argc, char **argv, int option);
+int echo_builtin(int argc, char **argv);
 
 // PWD (built-in)
 int pwd_builtin(t_env *env);
 
 
 // Unset (built-in)
-int unset_builtin(t_env **env, char *key);
+int unset_builtin(t_env **env, char **keys);
 
 /***************SIGNALS****************/
 void handle_sigint(int sig);

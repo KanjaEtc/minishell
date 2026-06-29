@@ -23,8 +23,8 @@ void exec_builtin(t_cmd *cmd, t_env **env)
 {
     if (ft_strcmp(cmd->cmd, "echo") == 0)
         echo_builtin(cmd->args);
-    else if (ft_strcmp(cmd->cmd, "cd") == 0)
-        cd_builtin(cmd->args, env);
+    // else if (ft_strcmp(cmd->cmd, "cd") == 0)
+    //     cd_builtin(cmd->args, env);
     else if (ft_strcmp(cmd->cmd, "pwd") == 0)
         pwd_builtin();
     else if (ft_strcmp(cmd->cmd, "export") == 0)
@@ -33,8 +33,8 @@ void exec_builtin(t_cmd *cmd, t_env **env)
         unset_builtin(env, cmd->args);
     else if (ft_strcmp(cmd->cmd, "env") == 0)
         env_builtin(*env);
-    else if (ft_strcmp(cmd->cmd, "exit") == 0)
-        exit_builtin(cmd->args);
+    // else if (ft_strcmp(cmd->cmd, "exit") == 0)
+    //     exit_builtin(cmd->args);
 }
 char *get_path(char *cmd, t_env *env)
 {
@@ -79,7 +79,7 @@ int exec_execve(t_cmd *cmd, t_env *env)
         return (-1);
     if (execve(cmd->cmd, cmd->args, envp) == -1)
     {
-        perror("command not found : %s\n", cmd->cmd);
+        perror("command not found\n");
         return (-1);
     }
     return (0);
