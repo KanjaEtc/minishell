@@ -10,6 +10,7 @@
 #include "struct.h"
 #include "../s_libft/s_libft.h"
 
+int g_var; // Global variable to store the exit status of the last executed command
 
 /*************LEXER*********************/
 t_token		*lexer(char *line);
@@ -47,17 +48,12 @@ int	    get_clean_len(char	*str);
 char	*strip_quotes(char *str);
 
 /***************BUILT-INS****************/
-//Export
 t_env	*export_builtin(char *env_str, t_env *env);
 t_env	*new_env_var(char *arg, t_env **env_list);
-
-// Env
 int env_builtin(t_env *env);
 int echo_builtin(int argc, char **argv);
 int pwd_builtin(t_env *env);
-
-
-// Unset (built-in)
+int cd_builtin(t_env *env, char **args);
 int unset_builtin(t_env *env, char **keys);
 
 /***************SIGNALS****************/

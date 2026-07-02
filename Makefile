@@ -5,6 +5,7 @@ LDFLAGS = -lreadline
 SOURCES = sources/minishell.c \
 		  sources/env/env_set.c \
 		  sources/env/env_utils.c \
+		  sources/exec/cd.c \
 		  sources/exec/echo.c \
 		  sources/exec/env.c \
 		  sources/exec/exec_cmd.c \

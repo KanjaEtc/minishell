@@ -23,8 +23,8 @@ void exec_builtin(t_cmd *cmd, t_env *env)
 {
     if (ft_strcmp(cmd->cmd, "echo") == 0)
         echo_builtin(cmd->argc, cmd->args);
-    // else if (ft_strcmp(cmd->cmd, "cd") == 0)
-    //     cd_builtin(cmd->args, env);
+    else if (ft_strcmp(cmd->cmd, "cd") == 0)
+        cd_builtin(env, cmd->args);
     else if (ft_strcmp(cmd->cmd, "pwd") == 0)
         pwd_builtin(env);
     else if (ft_strcmp(cmd->cmd, "export") == 0)
