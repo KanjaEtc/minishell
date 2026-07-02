@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-t_cmd	*lst_new_cmd(void)
+test_cmd	*lst_new_cmd(void)
 {
-	t_cmd	*commands;
+	test_cmd	*commands;
 
-	commands = malloc(sizeof(t_cmd));
+	commands = malloc(sizeof(test_cmd));
 	if (!commands)
 		return(NULL);
 	commands->args = NULL;
@@ -13,9 +13,9 @@ t_cmd	*lst_new_cmd(void)
 	return (commands);
 }
 
-void	free_cmd_table(t_cmd *cmd)
+void	free_cmd_table(test_cmd *cmd)
 {
-	t_cmd	*tmp;
+	test_cmd	*tmp;
 	int		i;
 
 	while (cmd)
@@ -38,17 +38,29 @@ void	free_cmd_table(t_cmd *cmd)
 
 int	count_arg(t_token *tokens)
 {
-@@ -22,7 +58,34 @@ int	count_arg(t_token *tokens)
+	int		count;
+	t_token	*curr;
+
+	count = 0;
+	curr = tokens;
+	while (curr && curr->type != PIPE)
+	{
+		if (curr->type == WORD)
+		{
 			count++;
 			curr = curr->next;
 		}
-		curr = curr->next;
 		else
-			curr = curr->next;
+		{
+			if (curr->next)
+				curr = curr->next->next;
+			else
+				curr = curr->next;
+		}
 	}
 	return (count);
 }
-}
+
 
 char	**get_cmd_args(t_token *tokens)
 {
@@ -73,4 +85,21 @@ char	**get_cmd_args(t_token *tokens)
 	}
 	args[i] = NULL;
 	return (args);
+}
+
+void	add_cmd_back(test_cmd **list, test_cmd *new_cmd)
+{
+	test_cmd	*last;
+
+	if (!list || !new_cmd)
+		return;
+	if (*list == NULL)
+	{
+		*list = new_cmd;
+		return;
+	}
+	last = *list;
+	while (last->next)
+		last = last->next;
+	last->next = new_cmd;
 }

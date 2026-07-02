@@ -72,6 +72,7 @@ t_cmd	*lst_new_cmd(void);
 void	free_cmd_table(t_cmd *cmd);
 int		count_arg(t_token *tokens);
 char	**get_cmd_args(t_token *tokens);
+void	add_cmd_back(t_cmd **list, t_cmd *new_cmd);
 
 /*************PARSER_UTILS_BIS****************/
 t_token	*copy_token(t_token *src);
