@@ -24,7 +24,7 @@ S_LIBFT = s_libft/ft_strlen.c \
 		  s_libft/ft_strjoin.c \
 		  s_libft/ft_substr.c \
 		  s_libft/ft_strchr.c \
-		  s_libft/memcpy.c \
+		  s_libft/ft_memcpy.c \
 		  s_libft/ft_putstr_fd.c \
 		  s_libft/ft_strlcpy.c \
 		  s_libft/ft_split.c \

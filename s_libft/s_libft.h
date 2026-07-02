@@ -26,7 +26,7 @@ void	ft_putstr_fd(char *s, int fd);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strjoin_three(char *s1, char *s2, char *s3);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	**ft_split(char const *s, char c);
+char	**ft_split(char *s, char c);
 
 // int		ft_isalnum(int c);
 // int		ft_isascii(int c);

@@ -7,13 +7,13 @@ t_env	*new_env_var(char *arg, t_env **env_list)
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
-	fill_export_env(arg, new);
+	export_builtin(arg, new);
 	new->next = NULL;
     ft_add_env_back(env_list, new);
 	return (new);
 }
 
-t_env	*fill_export_env(char *env_str, t_env *env)
+t_env	*export_builtin(char *env_str, t_env *env)
 {
     char *sep;
     size_t key_len;

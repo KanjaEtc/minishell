@@ -19,20 +19,20 @@ int is_builtin(char *cmd)
     return (0);
 }
 
-void exec_builtin(t_cmd *cmd, t_env **env)
+void exec_builtin(t_cmd *cmd, t_env *env)
 {
     if (ft_strcmp(cmd->cmd, "echo") == 0)
-        echo_builtin(cmd->args);
+        echo_builtin(cmd->argc, cmd->args);
     // else if (ft_strcmp(cmd->cmd, "cd") == 0)
     //     cd_builtin(cmd->args, env);
     else if (ft_strcmp(cmd->cmd, "pwd") == 0)
-        pwd_builtin();
+        pwd_builtin(env);
     else if (ft_strcmp(cmd->cmd, "export") == 0)
-        export_builtin(cmd->args, env);
+        export_builtin(cmd->args[0], env);
     else if (ft_strcmp(cmd->cmd, "unset") == 0)
         unset_builtin(env, cmd->args);
     else if (ft_strcmp(cmd->cmd, "env") == 0)
-        env_builtin(*env);
+        env_builtin(env);
     // else if (ft_strcmp(cmd->cmd, "exit") == 0)
     //     exit_builtin(cmd->args);
 }
@@ -85,10 +85,10 @@ int exec_execve(t_cmd *cmd, t_env *env)
     return (0);
 }
 
-void exec_cmd(t_cmd *cmd, t_env **env)
+void exec_cmd(t_cmd *cmd, t_env *env)
 {
     if (is_builtin(cmd->cmd))
         exec_builtin(cmd, env);
     else
-        exec_execve(cmd, *env);
+        exec_execve(cmd, env);
 }

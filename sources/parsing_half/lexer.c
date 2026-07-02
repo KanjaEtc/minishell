@@ -1,5 +1,28 @@
 #include "../../includes/minishell.h"
 
+static void	handle_lexer_operators(char *line, int *i, int *start, t_token **token_list)
+{
+	char	*curr_word;
+	
+	if (*i > *start)
+	{
+		curr_word = ft_substr(line, *start, *i - *start);
+		add_token_back(token_list, new_token(curr_word, WORD));
+	}
+	if ((line[*i] == '<' && line[*i + 1] == '<') || (line[*i] == '>' && line[*i + 1] == '>'))
+	{
+		curr_word = ft_substr(line, *i, 2);
+		add_token_back(token_list, new_token(curr_word, WORD));
+		(*i)++;
+	}
+	else
+	{
+		curr_word = ft_substr(line, *i, 1);
+		add_token_back(token_list, new_token(curr_word, WORD));
+	}
+	*start = *i + 1;
+}
+
 t_token	*lexer(char *line)
 {
 	t_token	*token_list;
@@ -54,28 +77,6 @@ t_token	*new_token(char *val, t_type type)
 	return (new);
 }
 
-static void	handle_lexer_operators(char *line, int *i, int *start, t_token **token_list)
-{
-	char	*curr_word;
-	
-	if (*i > *start)
-	{
-		curr_word = ft_substr(line, *start, *i - *start);
-		add_token_back(token_list, new_token(curr_word, WORD));
-	}
-	if ((line[*i] == '<' && line[*i + 1] == '<') || (line[*i] == '>' && line[*i + 1] == '>'))
-	{
-		curr_word = ft_substr(line, *i, 2);
-		add_token_back(token_list, new_token(curr_word, WORD));
-		(*i)++;
-	}
-	else
-	{
-		curr_word = ft_substr(line, *i, 1);
-		add_token_back(token_list, new_token(curr_word, WORD));
-	}
-	*start = *i + 1;
-}
 
 void	add_token_back(t_token **list, t_token *new_token)
 {

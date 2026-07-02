@@ -1,13 +1,13 @@
 #include "../../includes/minishell.h"
 
-int unset_builtin(t_env **env, char **keys)
+int unset_builtin(t_env *env, char **keys)
 {
-    t_env *current = *env;
+    t_env *current;
     t_env *prev = NULL;
 
+    current = env;
     while (current)
     {
-        char *key = current->key;
         int i = 0;
         while (keys[i])
         {
@@ -16,11 +16,8 @@ int unset_builtin(t_env **env, char **keys)
                 if (prev)
                     prev->next = current->next;
                 else
-                    *env = current->next;
-                free(current->key);
-                free(current->value);
-                free(current);
-                return (0);
+                    env = current->next;
+                return (free(current->key), free(current->value), free(current), 0);
             }
             i++;
         }
