@@ -67,4 +67,15 @@ int exec_execve(t_cmd *cmd, t_env *env);
 void exec_cmd(t_cmd *cmd, t_env *env);
 char *get_path(char *cmd, t_env *env);
 
+/*****************PARSER_UTILS****************/
+t_cmd	*lst_new_cmd(void);
+void	free_cmd_table(t_cmd *cmd);
+int		count_arg(t_token *tokens);
+char	**get_cmd_args(t_token *tokens);
+
+/*************PARSER_UTILS_BIS****************/
+t_token	*copy_token(t_token *src);
+void	add_redir_node(t_token **redirs, t_token *curr);
+
+
 #endif

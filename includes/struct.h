@@ -45,4 +45,12 @@ typedef struct s_cmd
     struct s_cmd	*next;
 }	t_cmd;
 
+
+typedef struct s_cmd
+{
+	char		**args;
+	t_token		*redirs;
+	struct s_cmd	*next;
+}	test_cmd;
+
 #endif
