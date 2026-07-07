@@ -10,7 +10,7 @@
 #include "struct.h"
 #include "../s_libft/s_libft.h"
 
-int g_var; // Global variable to store the exit status of the last executed command
+// int g_var; // Global variable to store the exit status of the last executed command
 
 /*************LEXER*********************/
 t_token		*lexer(char *line);
@@ -26,6 +26,9 @@ void		free_token(t_token **list);
 /*************ENV_SET*******************/
 t_env	*fill_env(char *env_str, t_env *env);
 t_env	*init_env(char **envp);
+t_env   *empty_env(void);
+t_env   *env_set(char **envp);
+
 
 /*************ENV_UTILS*****************/
 void	ft_add_env_back(t_env **list, t_env *new_node);

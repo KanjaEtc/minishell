@@ -6,20 +6,27 @@ t_env	*fill_env(char *env_str, t_env *env)
     size_t key_len;
 
     sep = ft_strchr(env_str, '=');
-    if (sep)
+    if (!sep)
     {
-        key_len = sep - env_str;
-        env->key = malloc(key_len + 1);
-        if (!env->key)
-            return (NULL);
-        ft_strlcpy(env->key, env_str, key_len + 1);
-        env->value = ft_strdup(sep + 1);
-        if (!env->value)
-            return (free(env->key), free(env), NULL);
-        return (env);
+        free(env);
+        return (NULL);
     }
-    else
-        return (free(env->key), free(env), NULL);
+    key_len = sep - env_str;
+    env->key = malloc(key_len + 1);
+    if (!env->key)
+    {
+        free(env);
+        return (NULL);
+    }
+    ft_strlcpy(env->key, env_str, key_len + 1);
+    env->value = ft_strdup(sep + 1);
+    if (!env->value)
+    {
+        free(env->key);
+        free(env);
+        return (NULL);
+    }
+    return (env);
 }
 
 t_env	*init_env(char **envp)
@@ -38,7 +45,8 @@ t_env	*init_env(char **envp)
         if (!node)
             return (free_env(head), NULL);
         node->next = NULL;
-        fill_env(envp[i], node);
+        if (!fill_env(envp[i], node))
+            return (free_env(head), NULL);
         if (!head)
             head = node;
         else
@@ -66,10 +74,51 @@ void *free_env(t_env *env)
     {
         t_env *temp = current;
         current = current->next;
-        free(temp->key);
-        free(temp->value);
+        printf("Freeing env variable: %s = %s\n", temp->key, temp->value);
+        if (temp->key)
+            free(temp->key);
+        if (temp->value)
+            free(temp->value);
         free(temp);
     }
     return (NULL);
 }
  
+t_env *empty_env(void)
+{
+    t_env *pwd;
+    t_env *shlvl;
+    t_env *path;
+
+    pwd = malloc(sizeof(t_env));
+    shlvl = malloc(sizeof(t_env));
+    path = malloc(sizeof(t_env));
+    if (!pwd || !shlvl || !path)
+        return (free(pwd), free(shlvl), free(path), NULL);
+    pwd->key = ft_strdup("PWD");
+    pwd->value = getcwd(NULL, 0);
+    shlvl->key = ft_strdup("SHLVL");
+    shlvl->value = ft_strdup("1");
+    path->key = ft_strdup("PATH");
+    path->value = ft_strdup("/usr/local/bin:/usr/bin:/bin");
+    if (!pwd->key || !pwd->value || !shlvl->key || !shlvl->value || !path->key || !path->value)
+        return (free_env(pwd), free_env(shlvl), free_env(path), NULL);
+    pwd->next = shlvl;
+    shlvl->next = path;
+    path->next = NULL;
+    return (pwd);
+}
+
+t_env *env_set(char **envp)
+{
+    if (envp && envp[0])
+    {
+        printf("Initializing environment variables from envp...\n");
+        return (init_env(envp));
+    }
+    else
+    {
+        printf("No environment variables found. Initializing empty environment...\n");
+        return (empty_env());
+    }
+}
