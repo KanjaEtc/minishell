@@ -9,14 +9,11 @@ int main(int ac, char **av, char **envp)
     
     ft_putstr_fd("Welcome to minishell!\n", 1);
     env = env_set(envp);
-    printf("Environment setup complete.\n");
-    printf("---------------------------------\n");
     if (!env)
     {
-        ft_putstr_fd("Error: Failed to initialize environment variables.\n", 2);
+        perror("Error: Failed to initialize environment variables.\n");
         return (1);
     }
-    print_env(env);
     // while (1)
     // {
     //     line = readline("minishell> ");
@@ -36,8 +33,6 @@ int main(int ac, char **av, char **envp)
     //     // }
     // }
     // rl_clear_history();
-    printf("---------------------------------\n");
-    printf("Exiting minishell. Cleaning up...\n");
     free_env(env);
     return 0;
 }
