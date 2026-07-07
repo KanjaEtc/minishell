@@ -57,15 +57,6 @@ t_env	*init_env(char **envp)
     return (head);
 }
 
-void print_env(t_env *env)
-{
-    t_env *current = env;
-    while (current)
-    {
-        printf("%s = %s\n", current->key, current->value);
-        current = current->next;
-    }
-}
 
 void *free_env(t_env *env)
 {
@@ -74,7 +65,6 @@ void *free_env(t_env *env)
     {
         t_env *temp = current;
         current = current->next;
-        printf("Freeing env variable: %s = %s\n", temp->key, temp->value);
         if (temp->key)
             free(temp->key);
         if (temp->value)
@@ -112,13 +102,7 @@ t_env *empty_env(void)
 t_env *env_set(char **envp)
 {
     if (envp && envp[0])
-    {
-        printf("Initializing environment variables from envp...\n");
         return (init_env(envp));
-    }
     else
-    {
-        printf("No environment variables found. Initializing empty environment...\n");
         return (empty_env());
-    }
 }

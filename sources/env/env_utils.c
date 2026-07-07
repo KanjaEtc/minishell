@@ -1,18 +1,5 @@
 #include "../../includes/minishell.h"
 
-t_env	*create_new_t_env(char *key, char *value)
-{
-	t_env	*new;
-
-	new = malloc(sizeof(t_env));
-	if (!new)
-		return (NULL);
-	new->key = ft_strdup(key);
-	new->value = ft_strdup(value);
-	new->next = NULL;
-	return (new);
-}
-
 void	ft_add_env_back(t_env **list, t_env *new_node)
 {
 	t_env	*last;
@@ -67,4 +54,14 @@ char **env_to_envp(t_env *env)
     envp[count] = NULL;
 
     return (envp);
+}
+
+void print_env(t_env *env)
+{
+    t_env *current = env;
+    while (current)
+    {
+        printf("%s = %s\n", current->key, current->value);
+        current = current->next;
+    }
 }
