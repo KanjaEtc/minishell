@@ -60,7 +60,7 @@ int cd_builtin(t_env *env, char **args);
 int unset_builtin(t_env *env, char **keys);
 
 /***************SIGNALS****************/
-void handle_sigint(int sig);
+void prompt_sigint(int sig);
 void setup_signals(void);
 
 /**************EXECUTION***************/
