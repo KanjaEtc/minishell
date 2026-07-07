@@ -1,0 +1,54 @@
+#include "minishell.h"
+
+static void	child_process(t_cmd *cmd, int *pipe_fd, int prev_fd, char **envp)
+{
+	if (prev_fd != -1)
+	{
+		dup2(prev_fd, STDIN_FILENO);
+		close(prev_fd);
+	}
+	if (cmd->next)
+	{
+		dup2(pipe_fd[1], STDOUT_FILENO);
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+	}
+	if (apply_redirections(cmd->redirs) == -1)
+		exit(1);
+	exec_simple_cmd(cmd, envp);
+}
+
+void	execute_pipeline(t_cmd *cmd_list, char **envp)
+{
+	t_cmd	*curr;
+	int		pipe_fd[2];
+	int		prev_fd;
+	int		status;
+	pid_t	pid;
+
+	curr = cmd_list;
+	prev_fd = -1;
+	while (curr)
+	{
+		if (curr->next && pipe(pipe_fd) == -1)
+			return (perror("minishell: pipe failed"));
+		pid = fork();
+		if (pid == -1)
+			return (perror("minishell: fork failed"));
+		if (pid == 0)
+			child_process(curr, pipe_fd, prev_fd, envp);
+		if (prev_fd != -1)
+			close(prev_fd);
+		if (curr->next)
+		{
+			close(pipe_fd[1]);
+			prev_fd = pipe_fd[0];
+		}
+		curr = curr->next;
+	}
+	while (waitpid(-1, &status, 0) > 0)
+	{
+		if (WIFEXITED(status))
+			g_var = WEXITSTATUS(status);
+	}
+}

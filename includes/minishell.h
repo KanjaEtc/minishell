@@ -7,8 +7,10 @@
 #include <readline/history.h>
 #include <unistd.h>
 #include <signal.h>
+#include <fcntl.h>
 #include "struct.h"
 #include "../s_libft/s_libft.h"
+#include "../libft/libft.h"
 
 int g_var; // Global variable to store the exit status of the last executed command
 
@@ -63,9 +65,10 @@ void setup_signals(void);
 /**************EXECUTION***************/
 int is_builtin(char *cmd);
 void exec_builtin(t_cmd *cmd, t_env *env);
-int exec_execve(t_cmd *cmd, t_env *env);
+// int exec_execve(t_cmd *cmd, t_env *env);
 void exec_cmd(t_cmd *cmd, t_env *env);
 char *get_path(char *cmd, t_env *env);
+void	exec_simple_cmd(t_cmd *cmd, t_env *env);
 
 /*****************PARSER_UTILS****************/
 t_cmd	*lst_new_cmd(void);
@@ -78,5 +81,7 @@ void	add_cmd_back(t_cmd **list, t_cmd *new_cmd);
 t_token	*copy_token(t_token *src);
 void	add_redir_node(t_token **redirs, t_token *curr);
 
+/********************PIPES********************/
+int	apply_redirections(t_token *redirs);
 
 #endif

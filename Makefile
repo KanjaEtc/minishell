@@ -9,6 +9,7 @@ SOURCES = sources/minishell.c \
 		  sources/exec/echo.c \
 		  sources/exec/env.c \
 		  sources/exec/exec_cmd.c \
+		  sources/exec/exec_cmd_2.c \
 		  sources/exec/export.c \
 		  sources/exec/pwd.c \
 		  sources/exec/unset.c \
@@ -18,6 +19,8 @@ SOURCES = sources/minishell.c \
 		  sources/parsing_half/expander_utils.c \
 		  sources/parsing_half/quote_stripper.c \
 		  sources/signals/prompt_signals.c \
+		  sources/pipes/pipes.c \
+		  sources/pipes/redirs.c \
 
 S_LIBFT = s_libft/ft_strlen.c \
 		  s_libft/ft_strcmp.c \
@@ -29,6 +32,7 @@ S_LIBFT = s_libft/ft_strlen.c \
 		  s_libft/ft_putstr_fd.c \
 		  s_libft/ft_strlcpy.c \
 		  s_libft/ft_split.c \
+		  s_libft/ft_putendl_fd.c \
 
 OBJECTS = $(SOURCES:.c=.o) $(S_LIBFT:.c=.o)
 TARGET = minishell
