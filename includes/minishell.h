@@ -10,7 +10,7 @@
 #include "struct.h"
 #include "../s_libft/s_libft.h"
 
-// int g_var; // Global variable to store the exit status of the last executed command
+extern int g_var; // Global variable to hold the exit status
 
 /*************LEXER*********************/
 t_token		*lexer(char *line);
