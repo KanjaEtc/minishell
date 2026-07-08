@@ -24,13 +24,13 @@ int	apply_redirections(t_token *redirs)
 	{
 		if (curr->next)
 		{
-			fd = open_redir_file(curr->next->value, curr->type);
+			if (curr->type == HEREDOC)
+				fd = handle_heredoc(curr->next->value);
+			else
+				fd = open_redir_file(curr->next->value, curr->type);
 			if (fd == -1)
-			{
-				perror("minishell: open failed");
-				return (-1);
-			}
-			if (curr->type == RED_IN)
+				return (perror("minishell: redirection failed"), -1);
+			if (curr->type == RED_IN || curr->type == HEREDOC)
 				dup2(fd, STDIN_FILENO);
 			else if (curr->type == RED_OUT || curr->type == APPEND)
 				dup2(fd, STDOUT_FILENO);

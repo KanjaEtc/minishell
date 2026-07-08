@@ -21,6 +21,7 @@ SOURCES = sources/minishell.c \
 		  sources/signals/prompt_signals.c \
 		  sources/pipes/pipes.c \
 		  sources/pipes/redirs.c \
+		  sources/pipes/heredoc.c \
 
 S_LIBFT = s_libft/ft_strlen.c \
 		  s_libft/ft_strcmp.c \

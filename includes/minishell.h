@@ -83,5 +83,7 @@ void	add_redir_node(t_token **redirs, t_token *curr);
 
 /********************PIPES********************/
 int	apply_redirections(t_token *redirs);
+void	execute_pipeline(t_cmd *cmd_list, char **envp);
+int	handle_heredoc(char *limiter);
 
 #endif
