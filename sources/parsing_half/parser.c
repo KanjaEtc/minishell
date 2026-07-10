@@ -2,8 +2,8 @@
 
 t_cmd	*parse_tokens(t_token *tokens)
 {
-	test_cmd	*cmd_list;
-	test_cmd	*new_cmd;
+	t_cmd	*cmd_list;
+	t_cmd	*new_cmd;
 	t_token	*curr;
 
 	if (!tokens)

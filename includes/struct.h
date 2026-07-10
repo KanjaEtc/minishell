@@ -42,9 +42,11 @@ typedef struct s_cmd
     char			*cmd;
     char			**args;
 	int				argc;
+	t_token			*redirs;
     struct s_cmd	*next;
 }	t_cmd;
 
+<<<<<<< HEAD
 
 // typedef struct s_cmd
 // {
@@ -53,4 +55,6 @@ typedef struct s_cmd
 // 	struct s_cmd	*next;
 // }	test_cmd;
 
+=======
+>>>>>>> pipes
 #endif

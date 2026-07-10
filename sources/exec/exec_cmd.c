@@ -72,23 +72,23 @@ char *get_path(char *cmd, t_env *env)
     return (NULL);
 }
 
-int exec_execve(t_cmd *cmd, t_env *env)
-{
-    char **envp = env_to_envp(env);
-    if (!envp)
-        return (-1);
-    if (execve(cmd->cmd, cmd->args, envp) == -1)
-    {
-        perror("command not found\n");
-        return (-1);
-    }
-    return (0);
-}
+// int exec_execve(t_cmd *cmd, t_env *env)
+// {
+//     char **envp = env_to_envp(env);
+//     if (!envp)
+//         return (-1);
+//     if (execve(cmd->cmd, cmd->args, envp) == -1)
+//     {
+//         perror("command not found\n");
+//         return (-1);
+//     }
+//     return (0);
+// }
 
 void exec_cmd(t_cmd *cmd, t_env *env)
 {
     if (is_builtin(cmd->cmd))
         exec_builtin(cmd, env);
     else
-        exec_execve(cmd, env);
+        exec_simple_cmd(cmd, env);
 }
