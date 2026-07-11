@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 static int	open_redir_file(char *filename, t_type type)
 {

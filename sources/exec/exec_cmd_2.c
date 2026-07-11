@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../includes/minishell.h"
 static void	clean_cmd_args(t_cmd *cmd)
 {
 	char	*tmp;
@@ -19,9 +19,10 @@ void	exec_simple_cmd(t_cmd *cmd, t_env *env)
 	char	*path;
 	char	**envp;
 
-	envp = env_to_envp(env);
+
 	if (!cmd || !cmd->args || !cmd->args[0])
 		exit(0);
+	envp = env_to_envp(env);
 	clean_cmd_args(cmd);
 	if (ft_strchr(cmd->args[0], '/'))
 	{
@@ -31,7 +32,7 @@ void	exec_simple_cmd(t_cmd *cmd, t_env *env)
 			exit(126);
 		}
 	}
-	path = get_path(cmd->args[0], envp);
+	path = get_path(cmd->args[0], env);
 	if (!path)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);

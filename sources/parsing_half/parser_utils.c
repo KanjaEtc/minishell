@@ -1,21 +1,21 @@
 #include "minishell.h"
 
-test_cmd	*lst_new_cmd(void)
+t_cmd	*lst_new_cmd(void)
 {
-	test_cmd	*commands;
+	t_cmd	*cmds;
 
-	commands = malloc(sizeof(test_cmd));
-	if (!commands)
+	cmds = malloc(sizeof(t_cmd));
+	if (!cmds)
 		return(NULL);
-	commands->args = NULL;
-	commands->redirs = NULL;
-	commands->next = NULL;
-	return (commands);
+	cmds->args = NULL;
+	cmds->redirs = NULL;
+	cmds->next = NULL;
+	return (cmds);
 }
 
-void	free_cmd_table(test_cmd *cmd)
+void	free_cmd_table(t_cmd *cmd)
 {
-	test_cmd	*tmp;
+	t_cmd	*tmp;
 	int		i;
 
 	while (cmd)
@@ -87,9 +87,9 @@ char	**get_cmd_args(t_token *tokens)
 	return (args);
 }
 
-void	add_cmd_back(test_cmd **list, test_cmd *new_cmd)
+void	add_cmd_back(t_cmd **list, t_cmd *new_cmd)
 {
-	test_cmd	*last;
+	t_cmd	*last;
 
 	if (!list || !new_cmd)
 		return;

@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 static void	child_process(t_cmd *cmd, int *pipe_fd, int prev_fd, char **envp)
 {

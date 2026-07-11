@@ -33,35 +33,40 @@ char	*ft_get_env(char *key, t_env *env_list)
 
 char **env_to_envp(t_env *env)
 {
-    int count = 0;
-    t_env *current = env;
-    while (current)
-    {
-        count++;
-        current = current->next;
-    }
+	char	**envp;
+	t_env	*current;
+	int		count;
+	int		i;
 
-    char **envp = malloc(sizeof(char *) * (count + 1));
-    if (!envp)
-        return (NULL);
-
-    current = env;
-    for (int i = 0; i < count; i++)
-    {
-        envp[i] = ft_strjoin_three(current->key, "=", current->value);
-        current = current->next;
-    }
-    envp[count] = NULL;
-
-    return (envp);
+	count = 0;
+	current = env;
+	while (current)
+	{
+		count++;
+		current = current->next;
+	}
+	envp = malloc(sizeof(char *) * (count + 1));
+	if (!envp)
+		return (NULL);
+	current = env;
+	i = 0;
+	while (i < count)
+	{
+		envp[i] = ft_strjoin_three(current->key, "=", current->value);
+		current = current->next;
+	}
+	envp[count] = NULL;
+	return (envp);
 }
 
 void print_env(t_env *env)
 {
-    t_env *current = env;
-    while (current)
-    {
-        printf("%s = %s\n", current->key, current->value);
-        current = current->next;
-    }
+    t_env *current;
+	
+	current = env;
+	while (current)
+	{
+		printf("%s = %s\n", current->key, current->value);
+		current = current->next;
+	}
 }

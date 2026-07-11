@@ -1,14 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   s_libft.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marotsen <marotsen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 17:56:06 by marotsen          #+#    #+#             */
-/*   Updated: 2025/11/22 10:25:04 by marotsen         ###   ########.fr       */
+/*   Updated: 2026/07/11 18:33:38 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef LIBFT_H
 # define LIBFT_H
 # include <stdlib.h> //malloc 
@@ -23,11 +24,12 @@ int	    ft_strcmp(const char *s1,const char *s2);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 size_t	ft_strlcpy(char *dst, const char *src, size_t siz);
 void	ft_putstr_fd(char *s, int fd);
+void	ft_putendl_fd(char *s, int fd);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strjoin_three(char *s1, char *s2, char *s3);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	**ft_split(char *s, char c);
-
+#endif
 // int		ft_isalnum(int c);
 // int		ft_isascii(int c);
 // int		ft_isalpha(int c);
@@ -54,4 +56,4 @@ char	**ft_split(char *s, char c);
 // void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 // char	*ft_itoa(int n);
 
-#endif
+
