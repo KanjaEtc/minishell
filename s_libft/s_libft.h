@@ -29,7 +29,12 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strjoin_three(char *s1, char *s2, char *s3);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	**ft_split(char *s, char c);
+<<<<<<< HEAD
 #endif
+=======
+void	ft_putendl_fd(char *s, int fd);
+
+>>>>>>> e727137 (commit)
 // int		ft_isalnum(int c);
 // int		ft_isascii(int c);
 // int		ft_isalpha(int c);
@@ -49,7 +54,6 @@ char	**ft_split(char *s, char c);
 // char	*ft_strnstr(const char *big, const char *little, size_t len);
 // void	*ft_calloc(size_t nmemb, size_t size);
 // void	ft_putchar_fd(char c, int fd);
-// void	ft_putendl_fd(char *s, int fd);
 // void	ft_putnbr_fd(int n, int fd);
 // char	*ft_strtrim(char const *s1, char const *set);
 // char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
