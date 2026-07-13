@@ -1,9 +1,12 @@
 #include "../includes/minishell.h"
+#include "../includes/debug_utils.h"
 
 int main(int ac, char **av, char **envp)
 {
     char *line;
     t_env *env;
+    t_token *tokens;
+
     
     (void)ac; (void)av;
     ft_putstr_fd("Welcome to minishell!\n", 1);
@@ -15,8 +18,13 @@ int main(int ac, char **av, char **envp)
     }
     while (1)
     {
-        prompt_signals();
+        setup_signals();
         line = readline("minishell> ");
+        if (!line || ft_strcmp(line, "exit") == 0)
+        {
+            ft_putstr_fd("exit\n", 1);
+            break;
+        }
         if (line && *line)
             add_history(line);
         else
@@ -24,7 +32,7 @@ int main(int ac, char **av, char **envp)
             free(line);
             continue;
         }
-        t_token *tokens = lexer(line);
+        tokens = lexer(line);
         if (!tokens)
         {
             free(line);
@@ -36,6 +44,7 @@ int main(int ac, char **av, char **envp)
     }
     rl_clear_history();
     free_env(env);
+    free_token(&tokens);
     return 0;
 }
 

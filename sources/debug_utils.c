@@ -1,5 +1,5 @@
-#include "../../includes/minishell.h"
-#include "../../includes/debug_utils.h"
+#include "../includes/minishell.h"
+#include "../includes/debug_utils.h"
 
 void print_env(t_env *env)
 {
@@ -20,7 +20,7 @@ void print_tokens(t_token *tokens)
     current = tokens;
     while (current)
     {
-        printf("Token: %s, Type: %d\n", current->val, current->type);
+        printf("Token: %s, Type: %d\n", current->value, current->type);
         current = current->next;
     }
 }
