@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-static void	child_process(t_cmd *cmd, int *pipe_fd, int prev_fd, char **envp)
+static void	child_process(t_cmd *cmd, int *pipe_fd, int prev_fd, t_env *env)
 {
 	if (prev_fd != -1)
 	{
@@ -15,10 +15,10 @@ static void	child_process(t_cmd *cmd, int *pipe_fd, int prev_fd, char **envp)
 	}
 	if (apply_redirections(cmd->redirs) == -1)
 		exit(1);
-	exec_simple_cmd(cmd, envp);
+	exec_simple_cmd(cmd, env);
 }
 
-static void	parent_close_fds(int *prev_fd, int *pipe_fd, t_cmd *curr)
+static void	parent_close_fds(int prev_fd, int *pipe_fd, t_cmd *curr)
 {
 	if (prev_fd != -1)
 			close(prev_fd);
@@ -28,10 +28,10 @@ static void	parent_close_fds(int *prev_fd, int *pipe_fd, t_cmd *curr)
 		prev_fd = pipe_fd[0];
 	}
 	else
-		*prev_fd = -1;
+		prev_fd = -1;
 }
 
-void	execute_pipeline(t_cmd *cmd_list, char **envp)
+void	execute_pipeline(t_cmd *cmd_list, t_env *env)
 {
 	t_cmd	*curr;
 	int		pipe_fd[2];
@@ -49,8 +49,8 @@ void	execute_pipeline(t_cmd *cmd_list, char **envp)
 		if (pid == -1)
 			return (perror("minishell: fork failed"));
 		if (pid == 0)
-			child_process(curr, pipe_fd, prev_fd, envp);
-		parent_close_fds(&prev_fd, pipe_fd, curr);
+			child_process(curr, pipe_fd, prev_fd, env);
+		parent_close_fds(prev_fd, pipe_fd, curr);
 		curr = curr->next;
 	}
 	while (waitpid(-1, &status, 0) > 0)

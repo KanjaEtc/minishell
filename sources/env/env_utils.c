@@ -58,15 +58,3 @@ char **env_to_envp(t_env *env)
 	envp[count] = NULL;
 	return (envp);
 }
-
-void print_env(t_env *env)
-{
-    t_env *current;
-	
-	current = env;
-	while (current)
-	{
-		printf("%s = %s\n", current->key, current->value);
-		current = current->next;
-	}
-}

@@ -3,6 +3,7 @@ CFLAGS = -Wall -Wextra -Werror -I.
 LDFLAGS = -lreadline
 
 SOURCES = sources/minishell.c \
+		  sources/debug_utils.c \
 		  sources/env/env_set.c \
 		  sources/env/env_utils.c \
 		  sources/exec/cd.c \
@@ -34,6 +35,7 @@ S_LIBFT = s_libft/ft_strlen.c \
 		  s_libft/ft_strlcpy.c \
 		  s_libft/ft_split.c \
 		  s_libft/ft_putendl_fd.c \
+		  s_libft/ft_strncmp.c \
 
 OBJECTS = $(SOURCES:.c=.o) $(S_LIBFT:.c=.o)
 TARGET = minishell

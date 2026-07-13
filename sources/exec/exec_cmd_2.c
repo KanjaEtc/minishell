@@ -19,7 +19,6 @@ void	exec_simple_cmd(t_cmd *cmd, t_env *env)
 	char	*path;
 	char	**envp;
 
-
 	if (!cmd || !cmd->args || !cmd->args[0])
 		exit(0);
 	envp = env_to_envp(env);

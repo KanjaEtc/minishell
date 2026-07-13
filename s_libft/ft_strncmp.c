@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "s_libft.h"
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
@@ -25,14 +25,4 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		return (0);
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
-/*#include <string.h>
-int main (void)
-{
-	char s1[] = "salut les amis";
-	char s2[] = "salut la reine de Jordanie";
 
-	printf("%s\n", s1);
-	printf("%s\n", s2);
-	printf("%d\n", ft_strncmp(s1, s2, 10));
-	printf("%d\n", strncmp((char *)s1, (char *)s2, 10));
-}*/

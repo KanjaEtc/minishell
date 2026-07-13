@@ -8,9 +8,10 @@
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <sys/wait.h>
 #include "struct.h"
 #include "../s_libft/s_libft.h"
-#include "../libft/libft.h"
+// #include "../libft/libft.h"
 
 extern int g_var; // Global variable to hold the exit status
 
@@ -86,7 +87,7 @@ void	add_redir_node(t_token **redirs, t_token *curr);
 
 /********************PIPES********************/
 int		apply_redirections(t_token *redirs);
-void	execute_pipeline(t_cmd *cmd_list, char **envp);
+void	execute_pipeline(t_cmd *cmd_list, t_env *env);
 int		handle_heredoc(char *limiter);
 
 #endif

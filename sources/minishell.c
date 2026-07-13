@@ -15,20 +15,24 @@ int main(int ac, char **av, char **envp)
     }
     while (1)
     {
-        setup_signals();
+        prompt_signals();
         line = readline("minishell> ");
-        if (!line)
-            break;
         if (line && *line)
             add_history(line);
-        // if (unclosed_quote(line))//sers simplement a gerer le cas des quotes non fermees
-        //     perror("Error: unclosed quote\n");
         else
         {
-            // t_token *tokens = lexer(line);
-            // suite sera coder plus tard
+            free(line);
+            continue;
         }
-        free(line);
+        t_token *tokens = lexer(line);
+        if (!tokens)
+        {
+            free(line);
+            continue;
+        }
+        print_tokens(tokens);
+        // expand_tokens(tokens, env);
+        // free(line);
     }
     rl_clear_history();
     free_env(env);

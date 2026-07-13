@@ -64,7 +64,6 @@ char *get_path(char *cmd, t_env *env)
         free(full_path);
         i++;
     }
-
     int j = 0;
     while (paths[j])
         free(paths[j++]);
