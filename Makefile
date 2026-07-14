@@ -14,11 +14,14 @@ SOURCES = sources/minishell.c \
 		  sources/exec/export.c \
 		  sources/exec/pwd.c \
 		  sources/exec/unset.c \
-		  sources/parsing_half/lexer.c \
-		  sources/parsing_half/lexer_utils.c \
-		  sources/parsing_half/expander.c \
-		  sources/parsing_half/expander_utils.c \
-		  sources/parsing_half/quote_stripper.c \
+		  sources/parsing/lexer.c \
+		  sources/parsing/lexer_utils.c \
+		  sources/parsing/expander.c \
+		  sources/parsing/expander_utils.c \
+		  sources/parsing/quote_stripper.c \
+		  sources/parsing/parser.c \
+		  sources/parsing/parser_utils.c \
+		  sources/parsing/parsing_utils_bis.c \
 		  sources/signals/prompt_signals.c \
 		  sources/pipes/pipes.c \
 		  sources/pipes/redirs.c \
