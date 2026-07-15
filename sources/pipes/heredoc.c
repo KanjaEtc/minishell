@@ -5,7 +5,7 @@ int	handle_heredoc(char *limiter)
 	char	*line;
 	int		pipe_fd[2];
 	
-	if (pipe(pipe_fd) == 1)
+	if (pipe(pipe_fd) == -1)
 		return (-1);
 	while (1)
 	{

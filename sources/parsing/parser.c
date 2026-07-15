@@ -22,10 +22,10 @@ t_cmd	*parse_tokens(t_token *tokens)
 				|| curr->type == APPEND || curr->type == HEREDOC)
 			{
 				add_redir_node(&new_cmd->redirs, curr);
-				if (curr->next)
+				if (curr->next && curr->next->next)
 					curr = curr->next->next;
 				else
-					curr = curr->next;
+					curr = NULL;
 			}
 			else
 				curr = curr->next;

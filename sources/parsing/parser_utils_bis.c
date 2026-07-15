@@ -23,11 +23,20 @@ void	add_redir_node(t_token **redirs, t_token *curr)
 	t_token	*redir;
 	t_token	*file;
 	t_token	*last;
+	char	*tmp;
 
 	file = NULL;
 	redir = copy_token(curr);
 	if (curr->next)
+	{
 		file = copy_token(curr->next);
+		if (file && file->value)
+		{
+			tmp = strip_quotes(file->value);
+			free(file->value);
+			file->value = tmp;
+		}
+	}
 	redir->next = file;
 	if (!*redirs)
 	{

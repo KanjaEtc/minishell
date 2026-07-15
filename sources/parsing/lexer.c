@@ -64,6 +64,7 @@ t_token	*lexer(char *line)
 	if (line[start] != '\0')
 		add_token_back(&token_list,
 			new_token(ft_substr(line, start, i - start), WORD));
+	assign_token_types(token_list);
 	return (token_list);
 }
 

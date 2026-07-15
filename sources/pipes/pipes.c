@@ -2,6 +2,7 @@
 
 static void	child_process(t_cmd *cmd, int *pipe_fd, int prev_fd, t_env *env)
 {
+	setup_child_signals(); 
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);
@@ -18,17 +19,17 @@ static void	child_process(t_cmd *cmd, int *pipe_fd, int prev_fd, t_env *env)
 	exec_simple_cmd(cmd, env);
 }
 
-static void	parent_close_fds(int prev_fd, int *pipe_fd, t_cmd *curr)
+static int	parent_close_fds(int prev_fd, int *pipe_fd, t_cmd *curr)
 {
 	if (prev_fd != -1)
 			close(prev_fd);
 	if (curr->next)
 	{
 		close(pipe_fd[1]);
-		prev_fd = pipe_fd[0];
+		return (pipe_fd[0]);
 	}
 	else
-		prev_fd = -1;
+		return (-1);
 }
 
 void	execute_pipeline(t_cmd *cmd_list, t_env *env)
@@ -38,6 +39,7 @@ void	execute_pipeline(t_cmd *cmd_list, t_env *env)
 	int		prev_fd;
 	int		status;
 	pid_t	pid;
+	pid_t last_pid;
 
 	curr = cmd_list;
 	prev_fd = -1;
@@ -50,12 +52,19 @@ void	execute_pipeline(t_cmd *cmd_list, t_env *env)
 			return (perror("minishell: fork failed"));
 		if (pid == 0)
 			child_process(curr, pipe_fd, prev_fd, env);
-		parent_close_fds(prev_fd, pipe_fd, curr);
+		prev_fd = parent_close_fds(prev_fd, pipe_fd, curr);
+		if (!curr->next)
+			last_pid = pid;
 		curr = curr->next;
 	}
-	while (waitpid(-1, &status, 0) > 0)
+	if (last_pid != -1)
 	{
+		waitpid(last_pid, &status, 0);
 		if (WIFEXITED(status))
 			g_var = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_var = 128 + WTERMSIG(status);
 	}
+	while (waitpid(-1, &status, 0) > 0)
+		;
 }

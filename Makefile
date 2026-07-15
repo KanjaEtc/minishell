@@ -9,8 +9,9 @@ SOURCES = sources/minishell.c \
 		  sources/exec/cd.c \
 		  sources/exec/echo.c \
 		  sources/exec/env.c \
+		  sources/exec/exit.c \
 		  sources/exec/exec_cmd.c \
-		  sources/exec/exec_cmd_2.c \
+		  sources/exec/exec_cmd_bis.c \
 		  sources/exec/export.c \
 		  sources/exec/pwd.c \
 		  sources/exec/unset.c \
@@ -40,6 +41,8 @@ S_LIBFT = s_libft/ft_strlen.c \
 		  s_libft/ft_split.c \
 		  s_libft/ft_putendl_fd.c \
 		  s_libft/ft_strncmp.c \
+		  s_libft/ft_itoa.c \
+		  s_libft/ft_atoi.c \
 
 OBJECTS = $(SOURCES:.c=.o) $(S_LIBFT:.c=.o)
 TARGET = minishell

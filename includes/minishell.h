@@ -61,15 +61,17 @@ int		echo_builtin(int argc, char **argv);
 int		pwd_builtin(t_env *env);
 int		cd_builtin(t_env *env, char **args);
 int		unset_builtin(t_env *env, char **keys);
+int     exit_builtin(char **args, t_env *env);
 
 /***************SIGNALS****************/
 void	prompt_sigint(int sig);
 void	setup_signals(void);
+void	setup_exec_signals(void);
+void	setup_child_signals(void);
 
 /**************EXECUTION***************/
 int		is_builtin(char *cmd);
-void	exec_builtin(t_cmd *cmd, t_env *env);
-// int exec_execve(t_cmd *cmd, t_env *env);
+int 	exec_builtin(t_cmd *cmd, t_env *env);
 void	exec_cmd(t_cmd *cmd, t_env *env);
 char	*get_path(char *cmd, t_env *env);
 void	exec_simple_cmd(t_cmd *cmd, t_env *env);

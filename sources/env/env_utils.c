@@ -35,26 +35,33 @@ char **env_to_envp(t_env *env)
 {
 	char	**envp;
 	t_env	*current;
+	char	*val;
 	int		count;
 	int		i;
 
 	count = 0;
-	current = env;
-	while (current)
+	current = env; 
+	while (current) 
 	{
-		count++;
-		current = current->next;
+		count++; 
+		current = current->next; 
 	}
-	envp = malloc(sizeof(char *) * (count + 1));
+	envp = malloc(sizeof(char *) * (count + 1)); 
 	if (!envp)
-		return (NULL);
-	current = env;
+		return (NULL); 
+	current = env; 
 	i = 0;
-	while (i < count)
+	while (i < count) 
 	{
-		envp[i] = ft_strjoin_three(current->key, "=", current->value);
-		current = current->next;
+		if (current->value)
+			val = current->value;
+		else
+			val = "";
+		
+		envp[i] = ft_strjoin_three(current->key, "=", val); 
+		current = current->next; 
+		i++; 
 	}
-	envp[count] = NULL;
-	return (envp);
+	envp[count] = NULL; 
+	return (envp); 
 }

@@ -67,6 +67,7 @@ char	**get_cmd_args(t_token *tokens)
 	t_token	*current;
 	char	**args;
 	int		i;
+	char *tmp;
 
 	if (!tokens)
 		return (NULL);
@@ -79,7 +80,8 @@ char	**get_cmd_args(t_token *tokens)
 	{
 		if (current->type == WORD)
 		{
-			args[i++] = ft_strdup(current->value);
+			tmp = strip_quotes(current->value);
+			args[i++] = tmp;
 			current = current->next;
 		}
 		else
