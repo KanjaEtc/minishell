@@ -23,9 +23,12 @@ t_cmd	*parse_tokens(t_token *tokens)
 			{
 				add_redir_node(&new_cmd->redirs, curr);
 				if (curr->next)
+					curr = curr->next->next;
+				else
 					curr = curr->next;
 			}
-			curr = curr->next;
+			else
+				curr = curr->next;
 		}
 		add_cmd_back(&cmd_list, new_cmd);
 		if (curr && curr->type == PIPE)

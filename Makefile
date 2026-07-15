@@ -21,8 +21,9 @@ SOURCES = sources/minishell.c \
 		  sources/parsing/quote_stripper.c \
 		  sources/parsing/parser.c \
 		  sources/parsing/parser_utils.c \
-		  sources/parsing/parsing_utils_bis.c \
+		  sources/parsing/parser_utils_bis.c \
 		  sources/signals/prompt_signals.c \
+		  sources/signals/exec_signals.c \
 		  sources/pipes/pipes.c \
 		  sources/pipes/redirs.c \
 		  sources/pipes/heredoc.c \

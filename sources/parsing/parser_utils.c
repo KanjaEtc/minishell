@@ -78,10 +78,17 @@ char	**get_cmd_args(t_token *tokens)
 	while (current && current->type != PIPE)
 	{
 		if (current->type == WORD)
+		{
 			args[i++] = ft_strdup(current->value);
-		else if (current->type != PIPE && current->next)
+			current = current->next;
+		}
+		else
+		{
+			if (current->next)
+				current = current->next->next;
+			else
 				current = current->next;
-		current = current->next;
+		}
 	}
 	args[i] = NULL;
 	return (args);

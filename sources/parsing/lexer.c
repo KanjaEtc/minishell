@@ -23,46 +23,25 @@ static void	handle_lexer_operators(char *line, int *i, int *start, t_token **tok
 	*start = *i + 1;
 }
 
-// t_token	*lexer(char *line)
-// {
-// 	t_token	*token_list;
-// 	// char	*curr_word;
-// 	int		status;
-// 	int		start;
-// 	int		i;
+static void	process_char(char *line, int *i, int *start, t_token **token_list)
+{
+	char	*curr;
 
-// 	i = 0;
-// 	start = 0;
-// 	status = 0;
-// 	token_list = NULL;
-// 	while (line[i])
-// 	{
-// 		status = update_quote_status(line[i], status);
-// 		if (status == 0)
-// 		{
-// 			if (line[i] == ' ' || line[i] == '\t')
-// 			{
-// 				if (i > start)
-// 				{
-// 					curr_word = ft_substr(line, start, i - start);
-// 					add_token_back(&token_list,new_token(curr_word, WORD));
-// 				}
-// 				while (line[i] == ' ' || line[i] == '\t')
-// 					i++;
-// 				start = i;
-// 			}
-// 			else if (line[i] == '|' || line[i] == '<' || line[i] == '>')
-// 				handle_lexer_operators(line, &i, &start, &token_list);
-// 		}
-// 		i++;
-// 	}
-// 	if (line[start] != '\0')
-// 	{
-// 		curr_word = ft_substr(line, start, i - start);
-// 		add_token_back(&token_list, new_token(curr_word, WORD));
-// 	}
-// 	return (token_list);
-// }
+	if (line[*i] == ' ' || line[*i] == '\t')
+	{
+		if (*i > *start)
+		{
+			curr = ft_substr(line, *start, *i - *start);
+			add_token_back(token_list, new_token(curr, WORD));
+		}
+		while (line[*i] == ' ' || line[*i] == '\t')
+			(*i)++;
+		*start = *i;
+		(*i)--;
+	}
+	else if (line[*i] == '|' || line[*i] == '<' || line[*i] == '>')
+		handle_lexer_operators(line, i, start, token_list);
+}
 
 t_token	*lexer(char *line)
 {
@@ -80,14 +59,11 @@ t_token	*lexer(char *line)
 		status = update_quote_status(line[i], status);
 		if (status == 0)
 			process_char(line, &i, &start, &token_list);
-		if (line[i] && status != 0)
-		{
-			while (line[i] && status != 0)
-				i++;
-		}
+		i++;
 	}
 	if (line[start] != '\0')
-		add_token_back(&token_list, new_token(ft_substr(line, start, i - start), WORD));
+		add_token_back(&token_list,
+			new_token(ft_substr(line, start, i - start), WORD));
 	return (token_list);
 }
 

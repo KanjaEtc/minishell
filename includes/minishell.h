@@ -74,6 +74,9 @@ void	exec_cmd(t_cmd *cmd, t_env *env);
 char	*get_path(char *cmd, t_env *env);
 void	exec_simple_cmd(t_cmd *cmd, t_env *env);
 
+/*****************PARSER**********************/
+t_cmd	*parse_tokens(t_token *tokens);
+
 /*****************PARSER_UTILS****************/
 t_cmd	*lst_new_cmd(void);
 void	free_cmd_table(t_cmd *cmd);
