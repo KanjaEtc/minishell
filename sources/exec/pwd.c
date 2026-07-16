@@ -2,7 +2,8 @@
 
 int pwd_builtin(t_env *env)
 {
-    char *pwd = ft_get_env("PWD", env);
+    char *pwd;
+    pwd = ft_get_env("PWD", env);
     if (pwd)
     {
         ft_putstr_fd(pwd, 1);

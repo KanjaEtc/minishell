@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-int g_var = 0; // Global variable to store the exit status of the last executed command
+int g_var = 0; 
 
 void prompt_sigint(int sig)
 {
@@ -17,5 +17,5 @@ void prompt_sigint(int sig)
 void setup_signals(void)
 {
     signal(SIGINT, prompt_sigint);
-    signal(SIGQUIT,SIG_IGN); // Ignore SIGQUIT (Ctrl+\)
+    signal(SIGQUIT,SIG_IGN);
 }

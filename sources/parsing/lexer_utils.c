@@ -23,7 +23,7 @@ int	unclosed_quote(char *line)
 	}
 
 	if (status != 0)
-		return (1); //ca veut dire qu'il reste une quote non fermee
+		return (1);
 	return (0);
 }
 

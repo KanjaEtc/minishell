@@ -36,11 +36,4 @@ int	ft_atoi(const char *str)
 	}
 	return (nb * sign);
 }
-/*#include <stdlib.h>
-int main (void)
-{
-	char str[] = "   \n  \t -45689";
 
-	printf("%d\n", ft_atoi(str));
-	printf("%d\n", atoi(str));
-}*/

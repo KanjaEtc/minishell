@@ -1,114 +1,64 @@
 #include "../includes/minishell.h"
 #include "../includes/debug_utils.h"
 
-
-#include "../includes/minishell.h"
-#include "../includes/debug_utils.h"
-
-// int main(int ac, char **av, char **envp)
-// {
-// 	char    *line;
-// 	t_env   *env;
-// 	t_token *tokens;
-// 	t_cmd	*cmds;
-
-// 	(void)ac; (void)av; 
-// 	env = env_set(envp); 
-// 	if (!env)
-// 	{
-// 		perror("Error: Failed to initialize environment variables.\n"); 
-// 		return (1); 
-// 	}
-// 	while (1)
-// 	{
-// 		tokens = NULL;
-// 		cmds = NULL;
-// 		setup_signals(); 
-// 		line = readline("minishell> "); 
-// 		if (!line)
-// 		{
-// 			if (isatty(STDIN_FILENO))
-// 				ft_putstr_fd("exit\n", 1); 
-// 			break;
-// 		}
-// 		if (*line)
-// 			add_history(line); 
-// 		else
-// 		{
-// 			free(line); 
-// 			continue; 
-// 		}
-// 		tokens = lexer(line); 
-// 		if (!tokens)
-// 		{
-// 			free(line); 
-// 			continue; 
-// 		}
-// 		expand_tokens(tokens, env); 
-// 		cmds = parse_tokens(tokens); 
-// 		if (!cmds)
-// 		{
-// 			free_token(&tokens); 
-// 			free(line); 
-// 			continue; 
-// 		}
-// 		if (cmds->next)
-// 			execute_pipeline(cmds, env);
-// 		else
-// 			exec_cmd(cmds, env);
-// 		free_token(&tokens); 
-// 		free_cmd_table(cmds);
-// 		free(line); 
-// 	}
-// 	rl_clear_history(); 
-// 	free_env(env); 
-// 	return (0);
-// }
-
-int main(int ac, char **av, char **envp)
+static char *get_next_line_fallback(int fd)
 {
-	char    *line;
-	t_env   *env;
-	t_token *tokens;
-	t_cmd	*cmds;
+	char	buf[2];
+	char	*line;
+	char	*temp;
+	int		bytes;
 
-	(void)ac; (void)av;
-	env = env_set(envp);
-	if (!env)
-	{
-		perror("Error: Failed to initialize environment variables.\n");
-		return (1);
-	}
+	line = ft_strdup("");
+	if (!line)
+		return (NULL);
 	while (1)
 	{
-		tokens = NULL;
-		cmds = NULL;
+		bytes = read(fd, buf, 1);
+		if (bytes <= 0)
+			break ;
+		buf[1] = '\0';
+		if (buf[0] == '\n')
+			break;
+		temp = ft_strjoin_three(line, buf, "");
+		free(line);
+		line = temp;
+	}
+	if (bytes <= 0 && ft_strlen(line) == 0)
+		return (free(line), NULL);
+	return (line);
+}
+
+static void	run_shell_loop(t_env *env)
+{
+	char	*line;
+	t_token	*tokens;
+	t_cmd	*cmds;
+
+	while (1)
+	{
 		setup_signals();
-		
-		// Hide the prompt prefix when the tester runs non-interactively
 		if (isatty(STDIN_FILENO))
 			line = readline("minishell> ");
 		else
-			line = readline(NULL);
-			
+			line = get_next_line_fallback(STDIN_FILENO);
 		if (!line)
 		{
 			if (isatty(STDIN_FILENO))
 				ft_putstr_fd("exit\n", 1);
-			break;
+			break ;
 		}
 		if (*line)
 			add_history(line);
 		else
 		{
 			free(line);
-			continue;
+			continue ;
 		}
 		tokens = lexer(line);
 		if (!tokens)
 		{
 			free(line);
-			continue;
+			continue ;
 		}
 		expand_tokens(tokens, env);
 		cmds = parse_tokens(tokens);
@@ -116,7 +66,7 @@ int main(int ac, char **av, char **envp)
 		{
 			free_token(&tokens);
 			free(line);
-			continue;
+			continue ;
 		}
 		if (cmds->next)
 			execute_pipeline(cmds, env);
@@ -126,6 +76,20 @@ int main(int ac, char **av, char **envp)
 		free_cmd_table(cmds);
 		free(line);
 	}
+}
+
+int main(int ac, char **av, char **envp)
+{
+	t_env   *env;
+
+	(void)ac; (void)av;
+	env = env_set(envp);
+	if (!env)
+	{
+		perror("Error: Failed to initialize environment variables.\n");
+		return (1);
+	}
+	run_shell_loop(env);
 	rl_clear_history();
 	free_env(env);
 	return (0);

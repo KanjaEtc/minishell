@@ -31,21 +31,41 @@ char	*ft_get_env(char *key, t_env *env_list)
 	return (NULL);
 }
 
+static int	count_env(t_env *env)
+{
+	int	count;
+
+	count = 0;
+	while (env)
+	{
+		count++;
+		env = env->next;
+	}
+	return (count);
+}
+
+static void free_envp(char **envp, int i)
+{
+
+	if (!envp)
+		return;
+	i = 0;
+	while (i >= 0 && envp[i])
+	{
+		free(envp[i]);
+		i--;
+	}
+	free(envp);
+}
+
 char **env_to_envp(t_env *env)
 {
 	char	**envp;
 	t_env	*current;
-	char	*val;
 	int		count;
 	int		i;
 
-	count = 0;
-	current = env; 
-	while (current) 
-	{
-		count++; 
-		current = current->next; 
-	}
+	count = count_env(env);
 	envp = malloc(sizeof(char *) * (count + 1)); 
 	if (!envp)
 		return (NULL); 
@@ -54,14 +74,34 @@ char **env_to_envp(t_env *env)
 	while (i < count) 
 	{
 		if (current->value)
-			val = current->value;
+			envp[i] = ft_strjoin_three(current->key, "=", current->value);
 		else
-			val = "";
-		
-		envp[i] = ft_strjoin_three(current->key, "=", val); 
+			envp[i] = ft_strjoin_three(current->key, "=", "");
+		if (!envp[i])
+			return (free_envp(envp, i), NULL);
 		current = current->next; 
 		i++; 
 	}
 	envp[count] = NULL; 
 	return (envp); 
+}
+
+ t_env	*create_env_node(char *key, char *value)
+{
+	t_env	*node;
+
+	node = malloc(sizeof(t_env));
+	if (!node)
+		return (NULL);
+	node->key = ft_strdup(key);
+	node->value = value;
+	node->next = NULL;
+	if (!node->key || !node->value)
+	{
+		free(node->key);
+		free(node->value);
+		free(node);
+		return (NULL);
+	}
+	return (node);
 }

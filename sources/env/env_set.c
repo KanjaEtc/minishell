@@ -52,10 +52,14 @@ t_env	*init_env(char **envp)
 
 void *free_env(t_env *env)
 {
-    t_env *current = env;
+
+    t_env *current;
+    t_env *temp;
+    
+    current = env;
     while (current)
     {
-        t_env *temp = current;
+        temp = current;
         current = current->next;
         if (temp->key)
             free(temp->key);
@@ -72,22 +76,14 @@ t_env *empty_env(void)
     t_env *shlvl;
     t_env *path;
 
-    pwd = malloc(sizeof(t_env));
-    shlvl = malloc(sizeof(t_env));
-    path = malloc(sizeof(t_env));
+    pwd = create_env_node("PWD", getcwd(NULL, 0));
+    shlvl = create_env_node("SHLVL", "1");
+    path = create_env_node("PATH", "/usr/local/bin:/usr/bin:/bin");
     if (!pwd || !shlvl || !path)
-        return (free(pwd), free(shlvl), free(path), NULL);
+        return (free_env(pwd), free_env(shlvl), free_env(path), NULL);
     pwd->next = shlvl;
     shlvl->next = path;
     path->next = NULL;
-    pwd->key = ft_strdup("PWD");
-    pwd->value = getcwd(NULL, 0);
-    shlvl->key = ft_strdup("SHLVL");
-    shlvl->value = ft_strdup("1");
-    path->key = ft_strdup("PATH");
-    path->value = ft_strdup("/usr/local/bin:/usr/bin:/bin");
-    if (!pwd->key || !pwd->value || !shlvl->key || !shlvl->value || !path->key || !path->value)
-        return (free_env(pwd), NULL);
     return (pwd);
 }
 

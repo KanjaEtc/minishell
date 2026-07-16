@@ -2,7 +2,9 @@
 
 int env_builtin(t_env *env)
 {
-    t_env *current = env;
+    t_env *current;
+    
+    current = env;
     while (current)
     {
         if (current->value)

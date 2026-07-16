@@ -16,6 +16,11 @@ static void	child_process(t_cmd *cmd, int *pipe_fd, int prev_fd, t_env *env)
 	}
 	if (apply_redirections(cmd->redirs) == -1)
 		exit(1);
+	if (is_builtin(cmd->args[0]))
+	{
+		g_var = exec_builtin(cmd, env);
+		exit(g_var);
+	}
 	exec_simple_cmd(cmd, env);
 }
 
@@ -43,6 +48,7 @@ void	execute_pipeline(t_cmd *cmd_list, t_env *env)
 
 	curr = cmd_list;
 	prev_fd = -1;
+	last_pid = -1;
 	while (curr)
 	{
 		if (curr->next && pipe(pipe_fd) == -1)

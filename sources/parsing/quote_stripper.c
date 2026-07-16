@@ -26,19 +26,12 @@ int	get_clean_len(char	*str)
 	return (len);
 }
 
-
-char	*strip_quotes(char *str)
+static void	copy_stripped_chars(char *str, char *new_s)
 {
 	t_status	quote;
-	char		*new_s;
 	int			i;
 	int			j;
 
-	if (!str)
-		return (NULL);
-	new_s = malloc(sizeof(char) * (get_clean_len(str) + 1));
-	if (!new_s)
-		return (NULL);
 	i = 0;
 	j = 0;
 	quote.status = NO_QUOTES;
@@ -57,5 +50,19 @@ char	*strip_quotes(char *str)
 		i++;
 	}
 	new_s[j] = '\0';
+}
+
+char	*strip_quotes(char *str)
+{
+	char		*new_s;
+	int 		len;
+
+	if (!str)
+		return (NULL);
+	len = get_clean_len(str);
+	new_s = malloc(sizeof(char) * (len + 1));
+	if (!new_s)
+		return (NULL);
+	copy_stripped_chars(str, new_s);
 	return (new_s);
 }

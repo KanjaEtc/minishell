@@ -3,12 +3,24 @@
 void	expand_tokens(t_token *tokens, t_env *env)
 {
 	t_token	*current;
+	char *stripped;
 
 	current = tokens;
 	while (current)
 	{
 		if (current->type == WORD && current->value)
+		{
 			current->value = expand_string(current->value, env);
+			if (current->value)
+			{
+				stripped = strip_quotes(current->value);
+				if (stripped)
+				{
+					free(current->value);
+					current->value = stripped;
+				}
+			}
+		}
 		current = current->next;
 	}
 }
@@ -52,8 +64,10 @@ char	*handle_dollar(char *str, int i, t_env *env)
 	char	*new_s;
 	char	*var_value;
 	int 	after_start;
+	int 	len;
 
-	var_name = ft_substr(str, i + 1, var_len(&str[i + 1]));
+	len = var_len(&str[i + 1]);
+	var_name = ft_substr(str, i + 1, len);
 	before = ft_substr(str, 0, i);
 	after_start = i + 1 + ft_strlen(var_name);
 	after = ft_substr(str, after_start, ft_strlen(str) - after_start);
@@ -66,9 +80,5 @@ char	*handle_dollar(char *str, int i, t_env *env)
 	new_s = ft_strjoin_three(before, var_value, after);
 	if (ft_strcmp(var_name, "?") == 0 && var_value && *var_value)
 		free(var_value);
-	free(str);
-	free(before);
-	free(after);
-	free(var_name);
-	return (new_s);
+	return (free(str), free(before), free(after), free(var_name), new_s);
 }

@@ -9,6 +9,7 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include "struct.h"
 #include "../s_libft/s_libft.h"
 // #include "../libft/libft.h"
@@ -39,6 +40,8 @@ char	*ft_get_env(char *key, t_env *env_list);
 void	print_env(t_env *env);
 void	*free_env(t_env *env);
 char	**env_to_envp(t_env *env);
+t_env	*create_env_node(char *key, char *value);
+
 
 /***************EXPANDER_UTILS***********/
 int		is_valid_var_char(char c);
@@ -54,14 +57,15 @@ int	    get_clean_len(char	*str);
 char	*strip_quotes(char *str);
 
 /***************BUILT-INS****************/
-t_env	*export_builtin(char *env_str, t_env *env);
+int	    export_builtin(char *env_str, t_env *env);
+int	    export_no_args(t_env *env);
 t_env	*new_env_var(char *arg, t_env **env_list);
 int		env_builtin(t_env *env);
-int		echo_builtin(int argc, char **argv);
+int		echo_builtin(char **argv);
 int		pwd_builtin(t_env *env);
 int		cd_builtin(t_env *env, char **args);
 int		unset_builtin(t_env *env, char **keys);
-int     exit_builtin(char **args, t_env *env);
+int     exit_builtin(char **args);
 
 /***************SIGNALS****************/
 void	prompt_sigint(int sig);

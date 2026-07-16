@@ -2,6 +2,8 @@
 
 int is_builtin(char *cmd)
 {
+	if (!cmd)
+		return (0);
 	if (ft_strcmp(cmd, "echo") == 0)
 		return (1);
 	else if (ft_strcmp(cmd, "cd") == 0)
@@ -22,23 +24,23 @@ int is_builtin(char *cmd)
 int exec_builtin(t_cmd *cmd, t_env *env)
 {
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
-		return (echo_builtin(cmd->argc, cmd->args));
+		return (echo_builtin(cmd->args));
 	else if (ft_strcmp(cmd->args[0], "cd") == 0)
 		return (cd_builtin(env, cmd->args));
 	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
 		return (pwd_builtin(env));
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
 	{
-		if (export_builtin(cmd->args[1], env) != NULL)
-			return (0);
-		return (1);
+		if (!cmd->args[1])
+			return (export_no_args(env));
+		return (export_builtin(cmd->args[1], env));
 	}
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
 		return (unset_builtin(env, cmd->args));
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
 		return (env_builtin(env));
-	else if (ft_strcmp(cmd->cmd, "exit") == 0)
-	    return (exit_builtin(cmd->args, env));
+	else if (ft_strcmp(cmd->args[0], "exit") == 0)
+	    return (exit_builtin(cmd->args));
 	return (0);
 }
 static void	free_split(char **split)
@@ -84,6 +86,22 @@ char *get_path(char *cmd, t_env *env)
 	free_split(paths);  
 	return (NULL); 
 }
+static void	exec_single_builtin(t_cmd *cmd, t_env *env)
+{
+	int	saved_stdin;
+	int	saved_stdout;
+
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	if (apply_redirections(cmd->redirs) != -1)
+		g_var = exec_builtin(cmd, env);
+	else
+		g_var = 1;
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
+}
 
 void exec_cmd(t_cmd *cmd, t_env *env)
 {
@@ -93,14 +111,16 @@ void exec_cmd(t_cmd *cmd, t_env *env)
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return;
 	if (is_builtin(cmd->args[0]))
-	{
-		g_var = exec_builtin(cmd, env);
-	}
+		exec_single_builtin(cmd, env);
 	else
 	{
 		pid = fork();
 		if (pid == 0)
+		{
+			if (apply_redirections(cmd->redirs) == -1)
+				exit(1);
 			exec_simple_cmd(cmd, env);
+		}
 		else if (pid < 0)
 			perror("fork");
 		else

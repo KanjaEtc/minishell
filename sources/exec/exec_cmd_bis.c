@@ -1,18 +1,27 @@
 #include "../../includes/minishell.h"
-// static void	clean_cmd_args(t_cmd *cmd)
-// {
-// 	char	*tmp;
-// 	int		i;
 
-// 	i = 0;
-// 	while (cmd->args[i])
-// 	{
-// 		tmp = cmd->args[i];
-// 		cmd->args[i] = strip_quotes(tmp);
-// 		free(tmp);
-// 		i++;
-// 	}
-// }
+static void	check_directory_or_error(char *cmd)
+{
+	struct stat	path_stat;
+
+	if (stat(cmd, &path_stat) == 0)
+	{
+		if (S_ISDIR(path_stat.st_mode))
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd, 2);
+			ft_putendl_fd(": Is a directory", 2);
+			exit(126);
+		}
+	}
+	if (access(cmd, F_OK) != 0)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putendl_fd(": No such file or directory", 2);
+		exit(127);
+	}
+}
 
 void	exec_simple_cmd(t_cmd *cmd, t_env *env)
 {
@@ -24,6 +33,7 @@ void	exec_simple_cmd(t_cmd *cmd, t_env *env)
 	envp = env_to_envp(env);
 	if (ft_strchr(cmd->args[0], '/'))
 	{
+		check_directory_or_error(cmd->args[0]);
 		if (execve(cmd->args[0], cmd->args, envp) == -1)
 		{
 			perror("minishell");
@@ -39,7 +49,5 @@ void	exec_simple_cmd(t_cmd *cmd, t_env *env)
 		exit(127);
 	}
 	execve(path, cmd->args, envp);
-	perror("minishell: execve failed");
-	free(path);
-	exit(1);
+	exit(127);
 }

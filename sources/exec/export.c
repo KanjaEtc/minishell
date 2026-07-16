@@ -1,5 +1,30 @@
 #include "../../includes/minishell.h"
 
+int	export_no_args(t_env *env)
+{
+	t_env	*curr;
+
+	curr = env;
+	while (curr)
+	{
+		if (curr->value)
+			printf("declare -x %s=\"%s\"\n", curr->key, curr->value);
+		else
+			printf("declare -x %s\n", curr->key);
+		curr = curr->next;
+	}
+	return (0);
+}
+static void	set_env_val(t_env *node, char *val)
+{
+	if (node->value)
+		free(node->value);
+	if (val)
+		node->value = ft_strdup(val);
+	else
+		node->value = NULL;
+}
+
 t_env	*new_env_var(char *arg, t_env **env_list)
 {
 	t_env	*new;
@@ -13,27 +38,30 @@ t_env	*new_env_var(char *arg, t_env **env_list)
 	return (new);
 }
 
-t_env	*export_builtin(char *env_str, t_env *env)
+int	export_builtin(char *env_str, t_env *env)
 {
     char *sep;
-    size_t key_len;
+    char *key;
+    char *value;
+    t_env *current;
 
     sep = ft_strchr(env_str, '=');
     if (sep)
-    {
-        key_len = sep - env_str;
-        env->key = malloc(key_len + 1);
-        if (!env->key)
-            return (NULL);
-        ft_strlcpy(env->key, env_str, key_len + 1);
-        env->value = ft_strdup(sep + 1);
-        if (!env->value)
-         return (env);
-    }
+        key = ft_substr(env_str, 0, sep - env_str);
     else
+        key = ft_strdup(env_str);
+    value = NULL;
+    if (sep)
+        value = ft_strdup(sep + 1);
+    current = env;
+    while (current)
     {
-        env->key = ft_strdup(env_str);
-        env->value = NULL;
+        if (ft_strcmp(current->key, key) == 0)
+        {
+            set_env_val(current, value);
+            return (free(key), free(value), 0);
+        }
+        current = current->next;
     }
-    return (env);
+    return (free(key), free(value), 1);
 }
