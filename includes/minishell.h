@@ -81,7 +81,7 @@ void	setup_child_signals(void);
 /**************EXECUTION***************/
 int		is_builtin(char *cmd);
 int 	exec_builtin(t_cmd *cmd, t_env **env);
-void	exec_cmd(t_cmd *cmd, t_env *env);
+void	exec_cmd(t_cmd *cmd, t_env **env);
 char	*get_path(char *cmd, t_env *env);
 void	exec_simple_cmd(t_cmd *cmd, t_env *env);
 char	*find_executable_path(char *cmd, char **env_paths);
@@ -103,7 +103,7 @@ void	add_redir_node(t_token **redirs, t_token *curr);
 
 /********************PIPES********************/
 int		apply_redirections(t_token *redirs);
-void	execute_pipeline(t_cmd *cmd_list, t_env *env);
+void	execute_pipeline(t_cmd *cmd_list, t_env **env);
 int		handle_heredoc(char *limiter);
 void	exec_all_heredocs(t_cmd *cmds);
 void	unlink_temporary_heredocs(t_cmd *cmds);

@@ -1,7 +1,7 @@
 #include "../includes/minishell.h"
 #include "../includes/debug_utils.h"
 
-static char *get_next_line_fallback(int fd)
+static char	*get_next_line_fallback(int fd)
 {
 	char	buf[2];
 	char	*line;
@@ -18,9 +18,8 @@ static char *get_next_line_fallback(int fd)
 			break ;
 		buf[1] = '\0';
 		if (buf[0] == '\n')
-			break;
+			break ;
 		temp = ft_strjoin(line, buf);
-		temp = ft_strjoin(temp, "");
 		free(line);
 		line = temp;
 	}
@@ -29,7 +28,7 @@ static char *get_next_line_fallback(int fd)
 	return (line);
 }
 
-static void	run_shell_loop(t_env *env)
+static void	run_shell_loop(t_env **env)
 {
 	char	*line;
 	t_token	*tokens;
@@ -67,7 +66,7 @@ static void	run_shell_loop(t_env *env)
 			free(line);
 			continue ;
 		}
-		expand_tokens(&tokens, env);
+		expand_tokens(&tokens, *env);
 		clean_empty_tokens(&tokens);
 		clean_all_tokens(tokens)
 ;		cmds = parse_tokens(tokens);
@@ -100,7 +99,7 @@ int main(int ac, char **av, char **envp)
 		perror("Error: Failed to initialize environment variables.\n");
 		return (1);
 	}
-	run_shell_loop(env);
+	run_shell_loop(&env);
 	rl_clear_history();
 	free_env(env);
 	return (0);

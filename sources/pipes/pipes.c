@@ -37,7 +37,7 @@ static int	parent_close_fds(int prev_fd, int *pipe_fd, t_cmd *curr)
 		return (-1);
 }
 
-void	execute_pipeline(t_cmd *cmd_list, t_env *env)
+void	execute_pipeline(t_cmd *cmd_list, t_env **env)
 {
 	t_cmd	*curr;
 	int		pipe_fd[2];
@@ -58,7 +58,7 @@ void	execute_pipeline(t_cmd *cmd_list, t_env *env)
 		if (pid == -1)
 			return (perror("minishell: fork failed"));
 		if (pid == 0)
-			child_process(curr, pipe_fd, prev_fd, env);
+			child_process(curr, pipe_fd, prev_fd, *env);
 		prev_fd = parent_close_fds(prev_fd, pipe_fd, curr);
 		if (!curr->next)
 			last_pid = pid;

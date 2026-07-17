@@ -5,20 +5,6 @@ LDFLAGS = -lreadline
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-# S_LIBFT = s_libft/ft_strlen.c \
-# 		  s_libft/ft_strdup.c \
-# 		  s_libft/ft_strjoin.c \
-# 		  s_libft/ft_substr.c \
-# 		  s_libft/ft_strchr.c \
-# 		  s_libft/ft_memcpy.c \
-# 		  s_libft/ft_putstr_fd.c \
-# 		  s_libft/ft_strlcpy.c \
-# 		  s_libft/ft_split.c \
-# 		  s_libft/ft_putendl_fd.c \
-# 		  s_libft/ft_strncmp.c \
-# 		  s_libft/ft_itoa.c \
-# 		  s_libft/ft_atoi.c \
-
 SOURCES = sources/minishell.c \
 		  sources/debug_utils.c \
 		  sources/env/env_set.c \

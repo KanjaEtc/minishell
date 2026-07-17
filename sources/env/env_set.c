@@ -70,17 +70,19 @@ void *free_env(t_env *env)
 	return (NULL);
 }
  
-t_env *empty_env(void)
+t_env	*empty_env(void)
 {
 	t_env *pwd;
 	t_env *shlvl;
 	t_env *path;
 
 	pwd = create_env_node("PWD", getcwd(NULL, 0));
-	shlvl = create_env_node("SHLVL", "1");
-	path = create_env_node("PATH", "/usr/local/bin:/usr/bin:/bin");
+	shlvl = create_env_node("SHLVL", ft_strdup("1"));
+	path = create_env_node("PATH", ft_strdup("/usr/local/bin:/usr/bin:/bin"));
+	
 	if (!pwd || !shlvl || !path)
 		return (free_env(pwd), free_env(shlvl), free_env(path), NULL);
+		
 	pwd->next = shlvl;
 	shlvl->next = path;
 	path->next = NULL;

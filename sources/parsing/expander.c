@@ -3,12 +3,14 @@
 void	expand_tokens(t_token **tokens, t_env *env)
 {
 	t_token *curr;
+	t_token	*next;
 	t_type prev_type;
 
 	curr = *tokens;
 	prev_type = WORD;
 	while (curr)
 	{
+		next = curr->next;
 		if (curr->type == WORD && curr->value)
 		{
 			if (ft_strchr(curr->value, '\'') || ft_strchr(curr->value, '"'))
@@ -18,11 +20,12 @@ void	expand_tokens(t_token **tokens, t_env *env)
 					|| prev_type == APPEND) && !curr->was_quoted
 				&& (curr->value[0] == '\0' || has_unquoted_space(curr->value)))
 				curr->invalid_redir = 1;
-			if (has_unquoted_space(curr->value))
-				insert_split_tokens(tokens, curr, split_expanded(curr->value));
 		}
 		prev_type = curr->type;
-		curr = curr->next;
+		if (curr->type == WORD && has_unquoted_space(curr->value)
+			&& !curr->invalid_redir)
+			insert_split_tokens(tokens, curr, split_expanded(curr->value));
+		curr = next;
 	}
 }
 

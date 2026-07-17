@@ -99,14 +99,14 @@ void	exec_single_builtin(t_cmd *cmd, t_env **env)
 	close(saved_stdout);
 }
 
-void	exec_cmd(t_cmd *cmd, t_env *env)
+void	exec_cmd(t_cmd *cmd, t_env **env)
 {
 	pid_t	pid;
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return ;
 	if (is_builtin(cmd->args[0]))
-		exec_single_builtin(cmd, &env);
+		exec_single_builtin(cmd, env);
 	else
 	{
 		setup_child_signals();
@@ -115,7 +115,7 @@ void	exec_cmd(t_cmd *cmd, t_env *env)
 		{
 			if (apply_redirections(cmd->redirs) == -1)
 				exit(1);
-			exec_simple_cmd(cmd, env);
+			exec_simple_cmd(cmd, *env);
 		}
 		else if (pid < 0)
 			perror("fork");
