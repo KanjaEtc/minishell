@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ranoumba <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 14:17:41 by ranoumba          #+#    #+#             */
-/*   Updated: 2025/11/15 21:45:11 by ranoumba         ###   ########.fr       */
+/*   Updated: 2026/07/17 17:23:04 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "s_libft.h"
+#include "libft.h"
 
 size_t	ft_countwords(char *s, char c)
 {
@@ -79,44 +79,3 @@ char	**ft_split(char *s, char c)
 	dest[i] = 0;
 	return (dest);
 }
-/*
-
-char    *ft_wordseparator(char *s, char c, int *j)
-{
-    int     i;
-    int     len;
-    int     start;
-    char    *string;
-
-    i = 0;
-    while (s[i] == c || s[i] == '\0')
-        i++;
-    len = 0;
-    start = i;
-    while (s[i] != c && s[i])
-    {
-        len++;
-        i++;
-    }
-    *j += i;
-    string = ft_substr(s, start, len);
-    return (Istring);
-}
-int main(int ac, char **av)
-{
-	char	**array;
-	int		i;
-	
-	if (ac != 3)
-		return (0);
-
-	array = ft_split(av[1], av[2][0]);
-	i = -1;
-	while (array[++i])
-	{
-		printf("%s\n", array[i]);
-		free(array[i]);
-	}
-	free(array);
-	return (0);
-}*/

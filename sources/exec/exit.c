@@ -3,23 +3,63 @@
 static int	is_num(char *str)
 {
 	int	i;
+	int	has_digit;
 
 	i = 0;
+	has_digit = 0;
+
 	while (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r'))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 		i++;
-	if (!str[i])
-		return (0);
-	while (str[i])
+	while (str[i] >= '0' && str[i] <= '9')
 	{
-		if (str[i] < '0' || str[i] > '9')
-			return (0);
+		has_digit = 1;
 		i++;
 	}
+	while (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r'))
+		i++;
+	if (str[i] != '\0' || !has_digit)
+		return (0);
 	return (1);
 }
 
+static int  dispatch_export(t_cmd *cmd, t_env **env)
+{
+	int i;
+	int ret;
+
+	i = 1;
+	ret = 0;
+	if (!cmd->args[1])
+		return (export_no_args(*env));
+	while (cmd->args[i])
+	{
+		if (export_builtin(cmd->args[i], env) == 1)
+			ret = 1;
+		i++;
+	}
+	return (ret);
+}
+
+int exec_builtin(t_cmd *cmd, t_env **env)
+{
+	if (ft_strcmp(cmd->args[0], "echo") == 0)
+		return (echo_builtin(cmd->args));
+	if (ft_strcmp(cmd->args[0], "cd") == 0)
+		return (cd_builtin(*env, cmd->args));
+	if (ft_strcmp(cmd->args[0], "pwd") == 0)
+		return (pwd_builtin(*env));
+	if (ft_strcmp(cmd->args[0], "export") == 0)
+		return (dispatch_export(cmd, env));
+	if (ft_strcmp(cmd->args[0], "unset") == 0)
+		return (unset_builtin(env, cmd->args));
+	if (ft_strcmp(cmd->args[0], "env") == 0)
+		return (env_builtin(*env));
+	if (ft_strcmp(cmd->args[0], "exit") == 0)
+		return (exit_builtin(cmd->args));
+	return (0);
+}
 
 int	exit_builtin(char **args)
 {

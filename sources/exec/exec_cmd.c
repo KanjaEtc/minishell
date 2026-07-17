@@ -21,28 +21,6 @@ int is_builtin(char *cmd)
 	return (0);
 }
 
-int exec_builtin(t_cmd *cmd, t_env *env)
-{
-	if (ft_strcmp(cmd->args[0], "echo") == 0)
-		return (echo_builtin(cmd->args));
-	else if (ft_strcmp(cmd->args[0], "cd") == 0)
-		return (cd_builtin(env, cmd->args));
-	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
-		return (pwd_builtin(env));
-	else if (ft_strcmp(cmd->args[0], "export") == 0)
-	{
-		if (!cmd->args[1])
-			return (export_no_args(env));
-		return (export_builtin(cmd->args[1], env));
-	}
-	else if (ft_strcmp(cmd->args[0], "unset") == 0)
-		return (unset_builtin(env, cmd->args));
-	else if (ft_strcmp(cmd->args[0], "env") == 0)
-		return (env_builtin(env));
-	else if (ft_strcmp(cmd->args[0], "exit") == 0)
-	    return (exit_builtin(cmd->args));
-	return (0);
-}
 static void	free_split(char **split)
 {
 	int	i;
@@ -86,15 +64,33 @@ char *get_path(char *cmd, t_env *env)
 	free_split(paths);  
 	return (NULL); 
 }
-static void	exec_single_builtin(t_cmd *cmd, t_env *env)
+
+static void	handle_parent_wait(pid_t pid)
+{
+	int	status;
+
+	waitpid(pid, &status, 0);
+	setup_signals();
+	if (WIFEXITED(status))
+		g_var = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		g_var = 128 + WTERMSIG(status);
+}
+
+void	exec_single_builtin(t_cmd *cmd, t_env **env)
 {
 	int	saved_stdin;
 	int	saved_stdout;
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
+	if (saved_stdin == -1 || saved_stdout == -1)
+		return ;
 	if (apply_redirections(cmd->redirs) != -1)
+	{
+		/* Remplace 'execute_builtin' par le nom de ta vraie fonction */
 		g_var = exec_builtin(cmd, env);
+	}
 	else
 		g_var = 1;
 	dup2(saved_stdin, STDIN_FILENO);
@@ -103,17 +99,17 @@ static void	exec_single_builtin(t_cmd *cmd, t_env *env)
 	close(saved_stdout);
 }
 
-void exec_cmd(t_cmd *cmd, t_env *env)
+void	exec_cmd(t_cmd *cmd, t_env *env)
 {
 	pid_t	pid;
-	int		status;
 
 	if (!cmd || !cmd->args || !cmd->args[0])
-		return;
+		return ;
 	if (is_builtin(cmd->args[0]))
-		exec_single_builtin(cmd, env);
+		exec_single_builtin(cmd, &env);
 	else
 	{
+		setup_child_signals();
 		pid = fork();
 		if (pid == 0)
 		{
@@ -124,12 +120,19 @@ void exec_cmd(t_cmd *cmd, t_env *env)
 		else if (pid < 0)
 			perror("fork");
 		else
-		{
-			waitpid(pid, &status, 0);
-			if (WIFEXITED(status))
-				g_var = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				g_var = 128 + WTERMSIG(status);
-		}
+			handle_parent_wait(pid);
 	}
+}
+
+char	*build_path(char *dir, char *cmd)
+{
+	char	*tmp;
+	char	*full_path;
+
+	tmp = ft_strjoin(dir, "/");
+	if (!tmp)
+		return (NULL);
+	full_path = ft_strjoin(tmp, cmd);
+	free(tmp);
+	return (full_path);
 }

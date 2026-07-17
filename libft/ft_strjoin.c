@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ranoumba <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 21:23:26 by ranoumba          #+#    #+#             */
-/*   Updated: 2025/11/13 22:06:25 by ranoumba         ###   ########.fr       */
+/*   Updated: 2026/07/17 17:22:20 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "s_libft.h"
+#include "libft.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
@@ -35,7 +35,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (finalstr);
 }
 
-char	*ft_strjoin_three(char *s1, char *s2, char *s3)
+char	*ft_strjoin_three(char const *s1, char const *s2, char const *s3)
 {
 	int	i;
 	char	*final_s;

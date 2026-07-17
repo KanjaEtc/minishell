@@ -1,24 +1,20 @@
 #include "../../includes/minishell.h"
 
-int	get_clean_len(char	*str)
+int	get_clean_len(char *str)
 {
-	t_status	quote;
-	int			i;
-	int			len;
+	int i;
+	int len;
+	int status;
 
 	i = 0;
 	len = 0;
-	quote.status = NO_QUOTES;
+	status = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'' && quote.status == NO_QUOTES)
-			quote.status = IN_S_QUOTES;
-		else if (str[i] == '"' && quote.status == NO_QUOTES)
-			quote.status = IN_D_QUOTES;
-		else if (str[i] == '\'' && quote.status == IN_S_QUOTES)
-			quote.status = NO_QUOTES;
-		else if (str[i] == '"' && quote.status == IN_D_QUOTES)
-			quote.status = NO_QUOTES;
+		if (status == 0 && (str[i] == '\'' || str[i] == '\"'))
+			status = str[i];
+		else if (status == str[i])
+			status = 0;
 		else
 			len++;
 		i++;
@@ -26,43 +22,44 @@ int	get_clean_len(char	*str)
 	return (len);
 }
 
-static void	copy_stripped_chars(char *str, char *new_s)
-{
-	t_status	quote;
-	int			i;
-	int			j;
-
-	i = 0;
-	j = 0;
-	quote.status = NO_QUOTES;
-	while (str[i])
-	{
-		if (str[i] == '\'' && quote.status == NO_QUOTES)
-			quote.status = IN_S_QUOTES;
-		else if (str[i] == '"' && quote.status == NO_QUOTES)
-			quote.status = IN_D_QUOTES;
-		else if (str[i] == '\'' && quote.status == IN_S_QUOTES)
-			quote.status = NO_QUOTES;
-		else if (str[i] == '"' && quote.status == IN_D_QUOTES)
-			quote.status = NO_QUOTES;
-		else
-			new_s[j++] = str[i];
-		i++;
-	}
-	new_s[j] = '\0';
-}
-
 char	*strip_quotes(char *str)
 {
-	char		*new_s;
-	int 		len;
+	char    *res;
+	int     i[3];
+	res = malloc(get_clean_len(str) + 1);
+	if (!res) return (NULL);
+	i[0] = 0; i[1] = 0; i[2] = 0;
+	while (str[i[0]])
+	{
+		if (i[2] == 0 && (str[i[0]] == '\'' || str[i[0]] == '\"'))
+			i[2] = str[i[0]];
+		else if (i[2] == str[i[0]])
+			i[2] = 0;
+		else
+			res[i[1]++] = str[i[0]];
+		i[0]++;
+	}
+	res[i[1]] = '\0';
+	return (res);
+}
 
-	if (!str)
-		return (NULL);
-	len = get_clean_len(str);
-	new_s = malloc(sizeof(char) * (len + 1));
-	if (!new_s)
-		return (NULL);
-	copy_stripped_chars(str, new_s);
-	return (new_s);
+void	clean_all_tokens(t_token *tokens)
+{
+	t_token *curr;
+	char    *tmp;
+
+	curr = tokens;
+	while (curr)
+	{
+		if (curr->type == WORD && curr->value)
+		{
+			tmp = strip_quotes(curr->value);
+			if (tmp)
+			{
+				free(curr->value);
+				curr->value = tmp;
+			}
+		}
+		curr = curr->next;
+	}
 }

@@ -14,30 +14,44 @@ static int	open_redir_file(char *filename, t_type type)
 	return (fd);
 }
 
+static int	execute_redir(t_token *curr)
+{
+	int	fd;
+
+	if (curr->next && curr->next->invalid_redir)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(curr->next->value, 2);
+		ft_putstr_fd(": ambiguous redirect\n", 2);
+		return (-1);
+	}
+	if (curr->type == HEREDOC)
+		fd = handle_heredoc(curr->next->value);
+	else
+		fd = open_redir_file(curr->next->value, curr->type);
+	if (fd == -1)
+		return (perror("minishell: redirection failed"), -1);
+	if (curr->type == RED_IN || curr->type == HEREDOC)
+		dup2(fd, STDIN_FILENO);
+	else if (curr->type == RED_OUT || curr->type == APPEND)
+		dup2(fd, STDOUT_FILENO);
+	close(fd);
+	return (0);
+}
+
 int	apply_redirections(t_token *redirs)
 {
 	t_token	*curr;
-	int		fd;
 
 	curr = redirs;
 	while (curr)
 	{
 		if (curr->next)
 		{
-			if (curr->type == HEREDOC)
-				fd = handle_heredoc(curr->next->value);
-			else
-				fd = open_redir_file(curr->next->value, curr->type);
-			if (fd == -1)
-				return (perror("minishell: redirection failed"), -1);
-			if (curr->type == RED_IN || curr->type == HEREDOC)
-				dup2(fd, STDIN_FILENO);
-			else if (curr->type == RED_OUT || curr->type == APPEND)
-				dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
-		if (curr->next)
+			if (execute_redir(curr) == -1)
+				return (-1);
 			curr = curr->next->next;
+		}
 		else
 			curr = curr->next;
 	}

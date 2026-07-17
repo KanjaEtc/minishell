@@ -1,19 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/15 22:06:49 by ranoumba          #+#    #+#             */
-/*   Updated: 2026/07/07 16:19:53 by ranoumba         ###   ########.fr       */
+/*   Created: 2025/11/10 11:01:51 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/17 17:21:32 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "s_libft.h"
+#include "libft.h"
 
-void	ft_putendl_fd(char *s, int fd)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	ft_putstr_fd(s, fd);
-	ft_putstr_fd("\n", fd);
+	size_t	i;
+
+	i = 0;
+	if (n == 0)
+		return (0);
+	while (i < n && s1[i] != '\0' && s1[i] == s2[i])
+		i++;
+	if (i == n)
+		return (0);
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
+

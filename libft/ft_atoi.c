@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ranoumba <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 15:17:46 by ranoumba          #+#    #+#             */
-/*   Updated: 2025/11/18 20:14:55 by ranoumba         ###   ########.fr       */
+/*   Updated: 2026/07/17 17:23:23 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "s_libft.h"
+#include "libft.h"
 
 int	ft_atoi(const char *str)
 {

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ranoumba <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 10:24:11 by ranoumba          #+#    #+#             */
-/*   Updated: 2025/11/17 11:52:24 by ranoumba         ###   ########.fr       */
+/*   Updated: 2026/07/17 17:23:18 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "s_libft.h"
+#include "libft.h"
 
 int	ft_len(int n)
 {

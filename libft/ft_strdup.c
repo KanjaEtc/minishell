@@ -3,31 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ranoumba <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/11 15:41:54 by ranoumba          #+#    #+#             */
-/*   Updated: 2025/11/13 09:49:13 by ranoumba         ###   ########.fr       */
+/*   Created: 2025/11/13 18:18:34 by marotsen          #+#    #+#             */
+/*   Updated: 2026/07/17 17:21:14 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//This function allocates sufficient memory for a copy of the string src,
+//copies the string, and returns a pointer to it.
+
+//The memory allocated for the new string should be freed by the caller.
+
 #include "libft.h"
 
-char	*ft_strdup(const char *s)
+char	*ft_strcpy(char *dest, char *src)
 {
-	int		i;
-	int		len;
-	char	*tab;
+	int	i;
 
-	len = ft_strlen((char *)s);
 	i = 0;
-	tab = malloc(sizeof(char) * (len + 1));
-	if (!tab)
-		return (0);
-	while (s[i] != '\0')
+	while (src[i] != '\0')
 	{
-		tab[i] = s[i];
+		dest[i] = src[i];
 		i++;
 	}
-	tab[i] = '\0';
-	return (tab);
+	dest[i] = '\0';
+	return (dest);
+}
+
+char	*ft_strdup(char *src)
+{
+	char	*dup;
+
+	dup = NULL;
+	dup = (char *)malloc((ft_strlen(src) + 1) * sizeof(char));
+	if (dup == NULL)
+		return (NULL);
+	ft_strcpy(dup, src);
+	return (dup);
 }

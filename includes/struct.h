@@ -22,6 +22,8 @@ typedef struct s_token
 {
 	char	*value;
 	t_type		type;
+	int			was_quoted;
+	int			invalid_redir;
 	struct s_token *next;
 }	t_token;
 

@@ -19,7 +19,8 @@ static char *get_next_line_fallback(int fd)
 		buf[1] = '\0';
 		if (buf[0] == '\n')
 			break;
-		temp = ft_strjoin_three(line, buf, "");
+		temp = ft_strjoin(line, buf);
+		temp = ft_strjoin(temp, "");
 		free(line);
 		line = temp;
 	}
@@ -60,18 +61,28 @@ static void	run_shell_loop(t_env *env)
 			free(line);
 			continue ;
 		}
-		expand_tokens(tokens, env);
-		cmds = parse_tokens(tokens);
+		if (check_syntax_errors(tokens))
+		{
+			free_token(&tokens);
+			free(line);
+			continue ;
+		}
+		expand_tokens(&tokens, env);
+		clean_empty_tokens(&tokens);
+		clean_all_tokens(tokens)
+;		cmds = parse_tokens(tokens);
 		if (!cmds)
 		{
 			free_token(&tokens);
 			free(line);
 			continue ;
 		}
+		exec_all_heredocs(cmds);
 		if (cmds->next)
 			execute_pipeline(cmds, env);
 		else
 			exec_cmd(cmds, env);
+		unlink_temporary_heredocs(cmds);
 		free_token(&tokens);
 		free_cmd_table(cmds);
 		free(line);

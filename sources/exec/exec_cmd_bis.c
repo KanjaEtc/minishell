@@ -27,27 +27,92 @@ void	exec_simple_cmd(t_cmd *cmd, t_env *env)
 {
 	char	*path;
 	char	**envp;
+	char	**paths;
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		exit(0);
 	envp = env_to_envp(env);
-	if (ft_strchr(cmd->args[0], '/'))
+	paths = NULL;
+	while (env)
 	{
-		check_directory_or_error(cmd->args[0]);
-		if (execve(cmd->args[0], cmd->args, envp) == -1)
-		{
-			perror("minishell");
-			exit(126);
-		}
+		if (ft_strcmp(env->key, "PATH") == 0)
+			paths = ft_split(env->value, ':');
+		env = env->next;
 	}
-	path = get_path(cmd->args[0], env);
-	if (!path)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->args[0], 2);
-		ft_putendl_fd(": command not found", 2);
-		exit(127);
-	}
+	path = find_executable_path(cmd->args[0], paths);
 	execve(path, cmd->args, envp);
+	perror("minishell");
+	exit(126);
+}
+
+static void	check_direct_path(char *cmd)
+{
+	check_directory_or_error(cmd);
+	if (access(cmd, F_OK) == 0)
+	{
+		if (access(cmd, X_OK) == 0)
+			return ;
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		exit(126);
+	}
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
+	exit(127);
+}
+
+/*
+** Parcourt les dossiers du PATH à la recherche du binaire.
+** Note s'il trouve le fichier sans les permissions d'exécution.
+*/
+static char	*search_in_paths(char *cmd, char **env_paths, int *has_perm)
+{
+	int		i;
+	char	*full_path;
+
+	i = 0;
+	while (env_paths && env_paths[i])
+	{
+		full_path = build_path(env_paths[i], cmd);
+		if (access(full_path, F_OK) == 0)
+		{
+			if (access(full_path, X_OK) == 0)
+				return (full_path);
+			*has_perm = 1;
+		}
+		free(full_path);
+		i++;
+	}
+	return (NULL);
+}
+
+/*
+** Fonction principale de résolution du chemin.
+** Gère les messages d'erreur et les sorties système (126 vs 127).
+*/
+char	*find_executable_path(char *cmd, char **env_paths)
+{
+	char	*path;
+	int		has_perm;
+
+	has_perm = 0;
+	if (ft_strchr(cmd, '/'))
+	{
+		check_direct_path(cmd);
+		return (ft_strdup(cmd));
+	}
+	path = search_in_paths(cmd, env_paths, &has_perm);
+	if (path)
+		return (path);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd, 2);
+	if (has_perm)
+	{
+		ft_putstr_fd(": Permission denied\n", 2);
+		exit(126);
+	}
+	ft_putstr_fd(": command not found\n", 2);
 	exit(127);
 }

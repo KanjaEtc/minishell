@@ -3,40 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ranoumba <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 19:14:17 by ranoumba          #+#    #+#             */
-/*   Updated: 2025/11/13 14:49:42 by ranoumba         ###   ########.fr       */
+/*   Created: 2025/11/15 03:11:07 by marotsen          #+#    #+#             */
+/*   Updated: 2026/07/17 17:21:44 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+//This function copies n bytes from memory area src to memory area dest.
+//The memory areas must not overlap.
 
+#include "libft.h"
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
+	unsigned char	*dptr;
+	unsigned char	*sptr;
 	size_t			i;
-	unsigned char	*dest2;
-	unsigned char	*src2;
 
+	dptr = (unsigned char *)dest;
+	sptr = (unsigned char *)src;
 	i = 0;
-	dest2 = (unsigned char *)dest;
-	src2 = (unsigned char *)src;
-	if (!dest2 && !src2)
-		return (NULL);
+	if (dest == 0 && src == 0)
+		return (dest);
 	while (i < n)
 	{
-		dest2[i] = src2[i];
+		dptr[i] = sptr[i];
 		i++;
 	}
-	return (dest2);
+	return (dest);
 }
-/*
-int main(void)
-{
-	char src[] = "geeks";
-	char dest[] = "salut";
-
-	printf("%s\n", dest);
-//	printf("%s\n", (char *)ft_memcpy(dest, (void *)src, 6));
-	printf("%s\n", (char *)memcpy(dest, src, 6));
-}*/

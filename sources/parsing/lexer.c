@@ -78,6 +78,8 @@ t_token	*new_token(char *val, t_type type)
 		return (NULL);
 	new->value = val;
 	new->type = type;
+	new->was_quoted = 0;
+	new->invalid_redir = 0;
 	new->next = NULL;
 	return (new);
 }

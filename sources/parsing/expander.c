@@ -1,84 +1,91 @@
 #include "../../includes/minishell.h"
 
-void	expand_tokens(t_token *tokens, t_env *env)
+void	expand_tokens(t_token **tokens, t_env *env)
 {
-	t_token	*current;
-	char *stripped;
+	t_token *curr;
+	t_type prev_type;
 
-	current = tokens;
-	while (current)
+	curr = *tokens;
+	prev_type = WORD;
+	while (curr)
 	{
-		if (current->type == WORD && current->value)
+		if (curr->type == WORD && curr->value)
 		{
-			current->value = expand_string(current->value, env);
-			if (current->value)
-			{
-				stripped = strip_quotes(current->value);
-				if (stripped)
-				{
-					free(current->value);
-					current->value = stripped;
-				}
-			}
+			if (ft_strchr(curr->value, '\'') || ft_strchr(curr->value, '"'))
+				curr->was_quoted = 1;
+			curr->value = expand_string(curr->value, env);
+			if ((prev_type == RED_IN || prev_type == RED_OUT
+					|| prev_type == APPEND) && !curr->was_quoted
+				&& (curr->value[0] == '\0' || has_unquoted_space(curr->value)))
+				curr->invalid_redir = 1;
+			if (has_unquoted_space(curr->value))
+				insert_split_tokens(tokens, curr, split_expanded(curr->value));
 		}
-		current = current->next;
+		prev_type = curr->type;
+		curr = curr->next;
 	}
 }
 
 char	*expand_string(char *str, t_env *env)
 {
-	t_status	state;
-	int			i;
+	int		i;
+	int		status;
 
 	i = 0;
-	state.status = NO_QUOTES;
-	while (str[i])
+	status = 0;
+	while (str && str[i])
 	{
-		if (str[i] == '\'' && state.status == NO_QUOTES)
-			state.status = IN_S_QUOTES;
-		else if (str[i] == '\'' && state.status == IN_S_QUOTES)
-			state.status = NO_QUOTES;
-		else if (str[i] == '\"' && state.status == NO_QUOTES)
-			state.status = IN_D_QUOTES;
-		else if (str[i] == '\"' && state.status == IN_D_QUOTES)
-			state.status = NO_QUOTES;
-		if (str[i] == '$' && state.status != IN_S_QUOTES)
+		status = update_quote_status(str[i], status);
+		if (str[i] == '$' && status != '\'')
 		{
 			if (str[i + 1] && (is_valid_var_char(str[i + 1]) || str[i + 1] == '?'))
-			{
-				str = handle_dollar(str, i, env);
-				i = -1;
-				state.status = NO_QUOTES;
-			}
+				str = handle_dollar(str, &i, env);
+			else
+				i++;
 		}
-		i++;
+		else
+			i++;
 	}
 	return (str);
 }
 
-char	*handle_dollar(char *str, int i, t_env *env)
+static char	*build_new_string(char *str, char *val, int i, int len)
 {
-	char	*var_name;
 	char	*before;
 	char	*after;
-	char	*new_s;
-	char	*var_value;
-	int 	after_start;
-	int 	len;
+	char	*res;
+	char	*tmp;
 
-	len = var_len(&str[i + 1]);
-	var_name = ft_substr(str, i + 1, len);
 	before = ft_substr(str, 0, i);
-	after_start = i + 1 + ft_strlen(var_name);
-	after = ft_substr(str, after_start, ft_strlen(str) - after_start);
-	if (ft_strcmp(var_name, "?") == 0)
-		var_value = ft_itoa(g_var);
+	after = ft_strdup(str + i + len + 1);
+	tmp = ft_strjoin(before, val);
+	res = ft_strjoin(tmp, after);
+	free(before);
+	free(after);
+	free(tmp);
+	return (res);
+}
+
+char	*handle_dollar(char *str, int *i, t_env *env)
+{
+	char	*name;
+	char	*val;
+	char	*new_s;
+	int		len;
+
+	len = var_len(&str[*i + 1]);
+	name = ft_substr(str, *i + 1, len);
+	if (ft_strcmp(name, "?") == 0)
+		val = ft_itoa(g_var);
 	else
-		var_value = ft_get_env(var_name, env);
-	if (!var_value)
-		var_value = "";
-	new_s = ft_strjoin_three(before, var_value, after);
-	if (ft_strcmp(var_name, "?") == 0 && var_value && *var_value)
-		free(var_value);
-	return (free(str), free(before), free(after), free(var_name), new_s);
+		val = ft_strdup(ft_get_env(name, env) ? ft_get_env(name, env) : "");
+	new_s = build_new_string(str, val, *i, len);
+	*i += ft_strlen(val); // On avance l'index à la fin de la valeur insérée
+	if (ft_strcmp(name, "?") == 0)
+		free(val);
+	else
+		free(val);
+	free(name);
+	free(str);
+	return (new_s);
 }

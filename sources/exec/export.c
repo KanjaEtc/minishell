@@ -15,53 +15,58 @@ int	export_no_args(t_env *env)
 	}
 	return (0);
 }
-static void	set_env_val(t_env *node, char *val)
-{
-	if (node->value)
-		free(node->value);
-	if (val)
-		node->value = ft_strdup(val);
-	else
-		node->value = NULL;
-}
 
-t_env	*new_env_var(char *arg, t_env **env_list)
+static int	execute_export(t_env **env_list, char *key, char *val, int has_sep)
 {
+	t_env	*curr;
 	t_env	*new;
 
-	new = malloc(sizeof(t_env));
-	if (!new)
-		return (NULL);
-	export_builtin(arg, new);
-	new->next = NULL;
-    ft_add_env_back(env_list, new);
-	return (new);
+	curr = *env_list;
+	while (curr)
+	{
+		if (ft_strcmp(curr->key, key) == 0)
+		{
+			if (has_sep)
+			{
+				free(curr->value);
+				curr->value = val;
+			}
+			else
+				free(val);
+			free(key);
+			return (0);
+		}
+		curr = curr->next;
+	}
+	new = create_env_node(key, val);
+	free(key);
+	if (new)
+		ft_add_env_back(env_list, new);
+	else
+		free(val);
+	return (new == NULL);
 }
 
-int	export_builtin(char *env_str, t_env *env)
+int	export_builtin(char *env_str, t_env **env_list)
 {
-    char *sep;
-    char *key;
-    char *value;
-    t_env *current;
+	char	*sep;
+	char	*key;
+	char	*val;
 
-    sep = ft_strchr(env_str, '=');
-    if (sep)
-        key = ft_substr(env_str, 0, sep - env_str);
-    else
-        key = ft_strdup(env_str);
-    value = NULL;
-    if (sep)
-        value = ft_strdup(sep + 1);
-    current = env;
-    while (current)
-    {
-        if (ft_strcmp(current->key, key) == 0)
-        {
-            set_env_val(current, value);
-            return (free(key), free(value), 0);
-        }
-        current = current->next;
-    }
-    return (free(key), free(value), 1);
+	if (!is_valid_identifier(env_str, 0))
+	{
+		ft_putstr_fd("minishell: export: `", 2);
+		ft_putstr_fd(env_str, 2);
+		ft_putendl_fd("': not a valid identifier", 2);
+		return (1);
+	}
+	sep = ft_strchr(env_str, '=');
+	if (sep)
+		key = ft_substr(env_str, 0, sep - env_str);
+	else
+		key = ft_strdup(env_str);
+	val = NULL;
+	if (sep)
+		val = ft_strdup(sep + 1);
+	return (execute_export(env_list, key, val, (sep != NULL)));
 }
