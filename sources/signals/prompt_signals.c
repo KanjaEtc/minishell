@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   prompt_signals.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:09:21 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 20:09:21 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-int g_var = 0; 
+int	g_var = 0;
 
-void prompt_sigint(int sig)
+void	prompt_sigint(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -14,8 +26,8 @@ void prompt_sigint(int sig)
 	}
 }
 
-void setup_signals(void)
+void	setup_signals(void)
 {
 	signal(SIGINT, prompt_sigint);
-	signal(SIGQUIT,SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }

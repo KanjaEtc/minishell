@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 19:59:25 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 19:59:25 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-static int  is_n_option(char *arg)
+static int	is_n_option(char *arg)
 {
-	int i;
+	int	i;
 
 	if (!arg || arg[0] != '-' || arg[1] != 'n')
 		return (0);
@@ -16,10 +28,11 @@ static int  is_n_option(char *arg)
 	return (1);
 }
 
-int echo_builtin(char **argv)
+int	echo_builtin(char **argv)
 {
-	int i;
-	int option;
+	int	i;
+	int	option;
+
 	option = 0;
 	i = 1;
 	while (argv[i] && is_n_option(argv[i]))

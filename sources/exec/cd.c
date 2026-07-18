@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 19:57:39 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 19:57:39 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-static void update_env_var(t_env *env, char *key, char *value)
+static void	update_env_var(t_env *env, char *key, char *value)
 {
-	t_env *curr;
+	t_env	*curr;
 
 	curr = env;
 	while (curr)
@@ -11,7 +23,7 @@ static void update_env_var(t_env *env, char *key, char *value)
 		{
 			free(curr->value);
 			curr->value = ft_strdup(value);
-			return;
+			return ;
 		}
 		curr = curr->next;
 	}
@@ -33,7 +45,7 @@ static int	handle_cd_home(t_env *env, char **path)
 
 static int	handle_cd_oldpwd(t_env *env, char **path)
 {
-	char    *oldpwd;
+	char	*oldpwd;
 
 	oldpwd = ft_get_env("OLDPWD", env);
 	if (oldpwd == NULL)
@@ -45,14 +57,34 @@ static int	handle_cd_oldpwd(t_env *env, char **path)
 	return (0);
 }
 
+static int	exec_and_update_cd(t_env *env, char *path, char *old_cwd)
+{
+	char	cwd[1024];
+
+	if (chdir(path) != 0)
+	{
+		perror("minishell: cd");
+		return (1);
+	}
+	if (getcwd(cwd, sizeof(cwd)))
+	{
+		if (old_cwd[0] != '\0')
+			update_env_var(env, "OLDPWD", old_cwd);
+		update_env_var(env, "PWD", cwd);
+	}
+	return (0);
+}
+
 int	cd_builtin(t_env *env, char **args)
 {
-	char *path;
-	char cwd[1024];
-	char old_cwd[1024];
+	char	*path;
+	char	old_cwd[1024];
 
-	if (args[2])
-		return (ft_putendl_fd("minishell: cd: too many arguments", 2), 1);
+	if (args[1] && args[2])
+	{
+		ft_putendl_fd("minishell: cd: too many arguments", 2);
+		return (1);
+	}
 	if (!getcwd(old_cwd, sizeof(old_cwd)))
 		old_cwd[0] = '\0';
 	if (args[1] == NULL || ft_strcmp(args[1], "~") == 0)
@@ -66,17 +98,6 @@ int	cd_builtin(t_env *env, char **args)
 			return (1);
 	}
 	else
-		path = args[1]; 
-	if (chdir(path) != 0) 
-	{
-		perror("minishell: cd");
-		return (1); 
-	}
-	if (getcwd(cwd, sizeof(cwd)))
-	{
-		if (old_cwd[0] != '\0')
-			update_env_var(env, "OLDPWD", old_cwd);
-		update_env_var(env, "PWD", cwd);
-	}
-	return (0); 
+		path = args[1];
+	return (exec_and_update_cd(env, path, old_cwd));
 }

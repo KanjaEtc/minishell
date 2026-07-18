@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:05:39 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 20:05:39 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	export_no_args(t_env *env)
@@ -19,31 +31,26 @@ int	export_no_args(t_env *env)
 static int	execute_export(t_env **env_list, char *key, char *val, int has_sep)
 {
 	t_env	*curr;
-	t_env	*new;
 
 	curr = *env_list;
-	while (curr)
-	{
-		if (ft_strcmp(curr->key, key) == 0)
-		{
-			if (has_sep)
-			{
-				free(curr->value);
-				curr->value = val;
-			}
-			else
-				free(val);
-			free(key);
-			return (0);
-		}
+	while (curr && ft_strcmp(curr->key, key) != 0)
 		curr = curr->next;
+	if (curr && has_sep)
+	{
+		free(curr->value);
+		curr->value = val;
 	}
-	new = create_env_node(key, val);
-	free(key);
-	if (new)
-		ft_add_env_back(env_list, new);
-	else
+	else if (curr)
 		free(val);
+	else
+	{
+		curr = create_env_node(key, val);
+		if (curr)
+			ft_add_env_back(env_list, curr);
+		else
+			free(val);
+	}
+	free(key);
 	return (0);
 }
 

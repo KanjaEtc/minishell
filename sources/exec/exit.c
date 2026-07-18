@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:05:26 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 20:05:26 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static int	is_num(char *str)
@@ -7,7 +19,6 @@ static int	is_num(char *str)
 
 	i = 0;
 	has_digit = 0;
-
 	while (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r'))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
@@ -24,10 +35,10 @@ static int	is_num(char *str)
 	return (1);
 }
 
-static int  dispatch_export(t_cmd *cmd, t_env **env)
+static int	dispatch_export(t_cmd *cmd, t_env **env)
 {
-	int i;
-	int ret;
+	int	i;
+	int	ret;
 
 	i = 1;
 	ret = 0;
@@ -42,7 +53,7 @@ static int  dispatch_export(t_cmd *cmd, t_env **env)
 	return (ret);
 }
 
-int exec_builtin(t_cmd *cmd, t_env **env)
+int	exec_builtin(t_cmd *cmd, t_env **env)
 {
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
 		return (echo_builtin(cmd->args));
@@ -57,30 +68,43 @@ int exec_builtin(t_cmd *cmd, t_env **env)
 	if (ft_strcmp(cmd->args[0], "env") == 0)
 		return (env_builtin(*env));
 	if (ft_strcmp(cmd->args[0], "exit") == 0)
-		return (exit_builtin(cmd->args));
+		return (exit_builtin(cmd->args, env));
 	return (0);
 }
 
-int	exit_builtin(char **args)
+static void	clean_exit(int code, t_env **env)
 {
-	long long	exit_code;
+	int	i;
 
+	i = 3;
+	while (i < 1024)
+	{
+		close(i);
+		i++;
+	}
+	if (env)
+		free_env(*env);
+	exit(code);
+}
+
+int	exit_builtin(char **args, t_env **env)
+{
 	if (isatty(STDIN_FILENO))
 		ft_putendl_fd("exit", 1);
 	if (!args || !args[1])
-		exit(g_var);
+		clean_exit(g_var, env);
 	if (!is_num(args[1]))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(args[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
-		exit(2);
+		clean_exit(2, env);
 	}
 	if (args[2] != NULL)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		return (1);
 	}
-	exit_code = ft_atoi(args[1]);
-	exit((unsigned char)exit_code);
+	clean_exit((unsigned char)ft_atoi(args[1]), env);
+	return (0);
 }

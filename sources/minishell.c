@@ -1,46 +1,60 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 19:43:10 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 19:43:10 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
-#include "../includes/debug_utils.h"
 
-// static char	*get_next_line_fallback(int fd)
-// {
-// 	char	buf[2];
-// 	char	*line;
-// 	char	*temp;
-// 	int		bytes;
+static void	execute_parsed_commands(t_cmd *cmds, t_env **env)
+{
+	exec_all_heredocs(cmds);
+	if (cmds->next)
+		execute_pipeline(cmds, env);
+	else
+		exec_cmd(cmds, env);
+	unlink_temporary_heredocs(cmds);
+}
 
-// 	line = ft_strdup("");
-// 	if (!line)
-// 		return (NULL);
-// 	while (1)
-// 	{
-// 		bytes = read(fd, buf, 1);
-// 		if (bytes <= 0)
-// 			break ;
-// 		buf[1] = '\0';
-// 		if (buf[0] == '\n')
-// 			break ;
-// 		temp = ft_strjoin(line, buf);
-// 		free(line);
-// 		line = temp;
-// 	}
-// 	if (bytes <= 0 && ft_strlen(line) == 0)
-// 		return (free(line), NULL);
-// 	return (line);
-// }
+static void	process_line(char *line, t_env **env)
+{
+	t_token	*tokens;
+	t_cmd	*cmds;
+
+	tokens = lexer(line);
+	if (!tokens)
+		return ;
+	if (check_syntax_errors(tokens))
+	{
+		free_token(&tokens);
+		return ;
+	}
+	expand_tokens(&tokens, *env);
+	clean_empty_tokens(&tokens);
+	clean_all_tokens(tokens);
+	cmds = parse_tokens(tokens);
+	if (cmds)
+	{
+		execute_parsed_commands(cmds, env);
+		free_cmd_table(cmds);
+	}
+	free_token(&tokens);
+}
 
 static void	run_shell_loop(t_env **env)
 {
 	char	*line;
-	t_token	*tokens;
-	t_cmd	*cmds;
 
 	while (1)
 	{
 		setup_signals();
-		// if (isatty(STDIN_FILENO))
-			line = readline("minishell> ");
-		// else
-		// 	line = get_next_line_fallback(STDIN_FILENO);
+		line = readline("minishell> ");
 		if (!line)
 		{
 			if (isatty(STDIN_FILENO))
@@ -48,51 +62,20 @@ static void	run_shell_loop(t_env **env)
 			break ;
 		}
 		if (*line)
+		{
 			add_history(line);
-		else
-		{
-			free(line);
-			continue ;
+			process_line(line, env);
 		}
-		tokens = lexer(line);
-		if (!tokens)
-		{
-			free(line);
-			continue ;
-		}
-		if (check_syntax_errors(tokens))
-		{
-			free_token(&tokens);
-			free(line);
-			continue ;
-		}
-		expand_tokens(&tokens, *env);
-		clean_empty_tokens(&tokens);
-		clean_all_tokens(tokens)
-;		cmds = parse_tokens(tokens);
-		if (!cmds)
-		{
-			free_token(&tokens);
-			free(line);
-			continue ;
-		}
-		exec_all_heredocs(cmds);
-		if (cmds->next)
-			execute_pipeline(cmds, env);
-		else
-			exec_cmd(cmds, env);
-		unlink_temporary_heredocs(cmds);
-		free_token(&tokens);
-		free_cmd_table(cmds);
 		free(line);
 	}
 }
 
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
-	t_env   *env;
+	t_env	*env;
 
-	(void)ac; (void)av;
+	(void)ac;
+	(void)av;
 	env = env_set(envp);
 	if (!env)
 	{
@@ -104,8 +87,3 @@ int main(int ac, char **av, char **envp)
 	free_env(env);
 	return (0);
 }
-
-// Sources :
-// "https://man7.org/linux/man-pages/man3/readline.3.html"
-// "https://i.sstatic.net/lVx5P.gif"
-// "https://42-cursus.gitbook.io/guide/3-rank-03/minishell/functions"

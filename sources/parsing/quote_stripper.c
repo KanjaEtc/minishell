@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quote_stripper.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:42:35 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 20:42:54 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	get_clean_len(char *str)
 {
-	int i;
-	int len;
-	int status;
+	int	i;
+	int	len;
+	int	status;
 
 	i = 0;
 	len = 0;
@@ -24,14 +36,19 @@ int	get_clean_len(char *str)
 
 char	*strip_quotes(char *str)
 {
-	char    *res;
-	int     i[3];
+	char	*res;
+	int		i[3];
+
 	res = malloc(get_clean_len(str) + 1);
-	if (!res) return (NULL);
-	i[0] = 0; i[1] = 0; i[2] = 0;
+	if (!res)
+		return (NULL);
+	i[0] = 0;
+	i[1] = 0;
+	i[2] = 0;
 	while (str[i[0]])
 	{
-		if (i[2] == 0 && (str[i[0]] == '\'' || str[i[0]] == '\"'))
+		if (i[2] == 0 && (str[i[0]] == '\''
+				|| str[i[0]] == '\"'))
 			i[2] = str[i[0]];
 		else if (i[2] == str[i[0]])
 			i[2] = 0;
@@ -45,8 +62,8 @@ char	*strip_quotes(char *str)
 
 void	clean_all_tokens(t_token *tokens)
 {
-	t_token *curr;
-	char    *tmp;
+	t_token	*curr;
+	char	*tmp;
 
 	curr = tokens;
 	while (curr)

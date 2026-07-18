@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:29:13 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 20:29:14 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	update_quote_status(char c, int curr_status)
@@ -21,7 +33,6 @@ int	unclosed_quote(char *line)
 		status = update_quote_status(line[i], status);
 		i++;
 	}
-
 	if (status != 0)
 		return (1);
 	return (0);
@@ -29,7 +40,7 @@ int	unclosed_quote(char *line)
 
 void	assign_token_types(t_token *token_list)
 {
-	t_token *current;
+	t_token	*current;
 
 	current = token_list;
 	while (current)

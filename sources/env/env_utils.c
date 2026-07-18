@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 19:53:43 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 20:53:51 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 void	ft_add_env_back(t_env **list, t_env *new_node)
@@ -5,11 +17,11 @@ void	ft_add_env_back(t_env **list, t_env *new_node)
 	t_env	*last;
 
 	if (!list || !new_node)
-		return;
+		return ;
 	if (*list == NULL)
 	{
 		*list = new_node;
-		return;
+		return ;
 	}
 	last = *list;
 	while (last->next)
@@ -44,11 +56,10 @@ static int	count_env(t_env *env)
 	return (count);
 }
 
-static void free_envp(char **envp, int i)
+static void	free_envp(char **envp, int i)
 {
-
 	if (!envp)
-		return;
+		return ;
 	i = 0;
 	while (i >= 0 && envp[i])
 	{
@@ -58,7 +69,7 @@ static void free_envp(char **envp, int i)
 	free(envp);
 }
 
-char **env_to_envp(t_env *env)
+char	**env_to_envp(t_env *env)
 {
 	char	**envp;
 	t_env	*current;
@@ -66,12 +77,12 @@ char **env_to_envp(t_env *env)
 	int		i;
 
 	count = count_env(env);
-	envp = malloc(sizeof(char *) * (count + 1)); 
+	envp = malloc(sizeof(char *) * (count + 1));
 	if (!envp)
-		return (NULL); 
-	current = env; 
+		return (NULL);
+	current = env;
 	i = 0;
-	while (i < count) 
+	while (i < count)
 	{
 		if (current->value)
 			envp[i] = ft_strjoin_three(current->key, "=", current->value);
@@ -79,29 +90,9 @@ char **env_to_envp(t_env *env)
 			envp[i] = ft_strjoin_three(current->key, "=", "");
 		if (!envp[i])
 			return (free_envp(envp, i), NULL);
-		current = current->next; 
-		i++; 
+		current = current->next;
+		i++;
 	}
-	envp[count] = NULL; 
-	return (envp); 
-}
-
- t_env	*create_env_node(char *key, char *value)
-{
-	t_env	*node;
-
-	node = malloc(sizeof(t_env));
-	if (!node)
-		return (NULL);
-	node->key = ft_strdup(key);
-	node->value = value;
-	node->next = NULL;
-	if (!node->key || !node->value)
-	{
-		free(node->key);
-		free(node->value);
-		free(node);
-		return (NULL);
-	}
-	return (node);
+	envp[count] = NULL;
+	return (envp);
 }

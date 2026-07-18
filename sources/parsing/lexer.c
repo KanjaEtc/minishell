@@ -1,15 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:28:43 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 20:29:59 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-static void	handle_lexer_operators(char *line, int *i, int *start, t_token **token_list)
+static	void	handle_lexer_operators(char *line, int *i,
+	int *start, t_token **token_list)
 {
 	char	*curr_word;
-	
+
 	if (*i > *start)
 	{
 		curr_word = ft_substr(line, *start, *i - *start);
 		add_token_back(token_list, new_token(curr_word, WORD));
 	}
-	if ((line[*i] == '<' && line[*i + 1] == '<') || (line[*i] == '>' && line[*i + 1] == '>'))
+	if ((line[*i] == '<' && line[*i + 1] == '<')
+		|| (line[*i] == '>' && line[*i + 1] == '>'))
 	{
 		curr_word = ft_substr(line, *i, 2);
 		add_token_back(token_list, new_token(curr_word, WORD));
@@ -68,10 +82,9 @@ t_token	*lexer(char *line)
 	return (token_list);
 }
 
-
 t_token	*new_token(char *val, t_type type)
 {
-	t_token *new;
+	t_token	*new;
 
 	new = malloc(sizeof(t_token));
 	if (!new)
@@ -84,22 +97,19 @@ t_token	*new_token(char *val, t_type type)
 	return (new);
 }
 
-
 void	add_token_back(t_token **list, t_token *new_token)
 {
-	t_token *last;
+	t_token	*last;
 
 	if (!list || !new_token)
-		return;
+		return ;
 	if (*list == NULL)
 	{
 		*list = new_token;
-		return;
+		return ;
 	}
 	last = *list;
 	while (last->next)
 		last = last->next;
 	last->next = new_token;
 }
-
-

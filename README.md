@@ -14,3 +14,10 @@ The user is asked for input. It looks like this :
 ## *Instructions*
 
 ## *Ressources*
+
+
+// Sources :
+// "https://man7.org/linux/man-pages/man3/readline.3.html"
+// "https://i.sstatic.net/lVx5P.gif"
+// "https://42-cursus.gitbook.io/guide/3-rank-03/minishell/functions"
+

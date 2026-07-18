@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:21:57 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 20:39:17 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 void	expand_tokens(t_token **tokens, t_env *env)
 {
-	t_token *curr;
+	t_token	*curr;
 	t_token	*next;
-	t_type prev_type;
+	t_type	prev_type;
 
 	curr = *tokens;
 	prev_type = WORD;
@@ -31,8 +43,8 @@ void	expand_tokens(t_token **tokens, t_env *env)
 
 char	*expand_string(char *str, t_env *env)
 {
-	int		i;
-	int		status;
+	int	i;
+	int	status;
 
 	i = 0;
 	status = 0;
@@ -41,7 +53,8 @@ char	*expand_string(char *str, t_env *env)
 		status = update_quote_status(str[i], status);
 		if (str[i] == '$' && status != '\'')
 		{
-			if (str[i + 1] && (is_valid_var_char(str[i + 1]) || str[i + 1] == '?'))
+			if (str[i + 1] && (is_valid_var_char(str[i + 1])
+					|| str[i + 1] == '?'))
 				str = handle_dollar(str, &i, env);
 			else
 				i++;
@@ -74,6 +87,7 @@ char	*handle_dollar(char *str, int *i, t_env *env)
 	char	*name;
 	char	*val;
 	char	*new_s;
+	char	*env_val;
 	int		len;
 
 	len = var_len(&str[*i + 1]);
@@ -81,13 +95,16 @@ char	*handle_dollar(char *str, int *i, t_env *env)
 	if (ft_strcmp(name, "?") == 0)
 		val = ft_itoa(g_var);
 	else
-		val = ft_strdup(ft_get_env(name, env) ? ft_get_env(name, env) : "");
+	{
+		env_val = ft_get_env(name, env);
+		if (env_val)
+			val = ft_strdup(env_val);
+		else
+			val = ft_strdup("");
+	}
 	new_s = build_new_string(str, val, *i, len);
-	*i += ft_strlen(val); // On avance l'index à la fin de la valeur insérée
-	if (ft_strcmp(name, "?") == 0)
-		free(val);
-	else
-		free(val);
+	*i += ft_strlen(val);
+	free(val);
 	free(name);
 	free(str);
 	return (new_s);

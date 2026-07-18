@@ -6,7 +6,7 @@
 /*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 11:01:51 by ranoumba          #+#    #+#             */
-/*   Updated: 2026/07/17 17:21:32 by ranoumba         ###   ########.fr       */
+/*   Updated: 2026/07/18 19:24:38 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,3 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		return (0);
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
-

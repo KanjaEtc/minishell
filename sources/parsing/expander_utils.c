@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:21:05 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 20:23:46 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-int is_valid_var_char(char c)
+int	is_valid_var_char(char c)
 {
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 		return (1);
@@ -11,9 +23,9 @@ int is_valid_var_char(char c)
 	return (0);
 }
 
-int var_len(char *str)
+int	var_len(char *str)
 {
-	int i;
+	int	i;
 
 	if (!str || !*str)
 		return (0);
@@ -35,7 +47,7 @@ void	clean_empty_tokens(t_token **tokens)
 	curr = tokens;
 	while (*curr)
 	{
-		if ((*curr)->value[0] == '\0' 
+		if ((*curr)->value[0] == '\0'
 			&& !(*curr)->was_quoted && !(*curr)->invalid_redir)
 		{
 			tmp = *curr;

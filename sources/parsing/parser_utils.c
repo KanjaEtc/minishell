@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:27:08 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 21:30:46 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 t_cmd	*lst_new_cmd(void)
@@ -6,7 +18,7 @@ t_cmd	*lst_new_cmd(void)
 
 	cmds = malloc(sizeof(t_cmd));
 	if (!cmds)
-		return(NULL);
+		return (NULL);
 	cmds->args = NULL;
 	cmds->redirs = NULL;
 	cmds->next = NULL;
@@ -61,10 +73,8 @@ int	count_arg(t_token *tokens)
 	return (count);
 }
 
-
 char	**get_cmd_args(t_token *tokens)
 {
-	t_token	*current;
 	char	**args;
 	int		i;
 
@@ -74,21 +84,13 @@ char	**get_cmd_args(t_token *tokens)
 	if (!args)
 		return (NULL);
 	i = 0;
-	current = tokens;
-	while (current && current->type != PIPE)
+	while (tokens && tokens->type != PIPE)
 	{
-		if (current->type == WORD)
-		{
-			args[i++] = ft_strdup(current->value);
-			current = current->next;
-		}
-		else
-		{
-			if (current->next)
-				current = current->next->next;
-			else
-				current = current->next;
-		}
+		if (tokens->type == WORD)
+			args[i++] = ft_strdup(tokens->value);
+		else if (tokens->next)
+			tokens = tokens->next;
+		tokens = tokens->next;
 	}
 	args[i] = NULL;
 	return (args);
@@ -99,11 +101,11 @@ void	add_cmd_back(t_cmd **list, t_cmd *new_cmd)
 	t_cmd	*last;
 
 	if (!list || !new_cmd)
-		return;
+		return ;
 	if (*list == NULL)
 	{
 		*list = new_cmd;
-		return;
+		return ;
 	}
 	last = *list;
 	while (last->next)

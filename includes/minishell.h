@@ -1,20 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 19:33:27 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 19:33:27 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <unistd.h>
-#include <signal.h>
-#include <fcntl.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
-#include "struct.h"
-#include "../libft/libft.h"
+# include <stdio.h>
+# include <stdlib.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <unistd.h>
+# include <signal.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <sys/stat.h>
+# include "struct.h"
+# include "../libft/libft.h"
 
-
-extern int g_var; // Global variable to hold the exit status
+extern int	g_var;
 
 /*************LEXER*********************/
 t_token	*lexer(char *line);
@@ -33,7 +44,6 @@ t_env	*init_env(char **envp);
 t_env	*empty_env(void);
 t_env	*env_set(char **envp);
 
-
 /*************ENV_UTILS*****************/
 void	ft_add_env_back(t_env **list, t_env *new_node);
 char	*ft_get_env(char *key, t_env *env_list);
@@ -43,7 +53,7 @@ char	**env_to_envp(t_env *env);
 t_env	*create_env_node(char *key, char *value);
 
 /*************ENV_UTILS*****************/
-int	is_valid_identifier(char *str, int is_unset);
+int		is_valid_identifier(char *str, int is_unset);
 
 /***************EXPANDER_UTILS***********/
 int		is_valid_var_char(char c);
@@ -57,7 +67,7 @@ char	*handle_dollar(char *str, int *i, t_env *env);
 t_token	*split_expanded(char *str);
 
 /***************QUOTE_STRIPPER***********/
-int	    get_clean_len(char	*str);
+int		get_clean_len(char	*str);
 char	*strip_quotes(char *str);
 void	clean_all_tokens(t_token *tokens);
 
@@ -70,7 +80,7 @@ int		echo_builtin(char **argv);
 int		pwd_builtin(t_env *env);
 int		cd_builtin(t_env *env, char **args);
 int		unset_builtin(t_env **env, char **keys);
-int		exit_builtin(char **args);
+int		exit_builtin(char **args, t_env **env);
 
 /***************SIGNALS****************/
 void	prompt_sigint(int sig);
@@ -80,12 +90,13 @@ void	setup_child_signals(void);
 
 /**************EXECUTION***************/
 int		is_builtin(char *cmd);
-int 	exec_builtin(t_cmd *cmd, t_env **env);
+int		exec_builtin(t_cmd *cmd, t_env **env);
 void	exec_cmd(t_cmd *cmd, t_env **env);
 char	*get_path(char *cmd, t_env *env);
 void	exec_simple_cmd(t_cmd *cmd, t_env *env);
 char	*find_executable_path(char *cmd, char **env_paths);
 char	*build_path(char *dir, char *cmd);
+void	exec_single_builtin(t_cmd *cmd, t_env **env);
 
 /*****************PARSER**********************/
 t_cmd	*parse_tokens(t_token *tokens);

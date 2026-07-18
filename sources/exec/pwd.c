@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:06:10 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 20:06:10 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-int pwd_builtin(t_env *env)
+int	pwd_builtin(t_env *env)
 {
-	char *pwd;
-	char cwd[1024];
+	char	*pwd;
+	char	cwd[1024];
 
 	pwd = ft_get_env("PWD", env);
 	if (pwd)

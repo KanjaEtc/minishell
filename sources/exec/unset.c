@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:08:06 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 20:08:06 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-static void delete_env_node(t_env **env_list, char *key)
+static void	delete_env_node(t_env **env_list, char *key)
 {
-	t_env   *current;
-	t_env   *prev;
+	t_env	*current;
+	t_env	*prev;
 
 	current = *env_list;
 	prev = NULL;
@@ -25,10 +37,10 @@ static void delete_env_node(t_env **env_list, char *key)
 	}
 }
 
-int unset_builtin(t_env **env, char **keys)
+int	unset_builtin(t_env **env, char **keys)
 {
-	int i;
-	int ret;
+	int	i;
+	int	ret;
 
 	if (!keys || !env || !*env)
 		return (0);

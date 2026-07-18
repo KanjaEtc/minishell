@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_utils_bis.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:40:55 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 20:40:56 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 t_token	*copy_token(t_token *src)
@@ -5,7 +17,7 @@ t_token	*copy_token(t_token *src)
 	t_token	*dst;
 
 	if (!src)
-		return(NULL);
+		return (NULL);
 	dst = malloc(sizeof(t_token));
 	if (!dst)
 		return (NULL);
@@ -32,7 +44,7 @@ void	add_redir_node(t_token **redirs, t_token *curr)
 	if (!*redirs)
 	{
 		*redirs = redir;
-		return;
+		return ;
 	}
 	last = *redirs;
 	while (last->next)

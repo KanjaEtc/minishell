@@ -1,9 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   word_split.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:45:46 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 21:37:48 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-static void	extract_word(char *str, int *i, int *start, t_token **head)
+static void	extract_word(char *str, int *i, int *start,
+	t_token **head)
 {
 	if (*i > *start)
-		add_token_back(head, new_token(ft_substr(str, *start, *i - *start), WORD));
+		add_token_back(head, new_token(ft_substr(str, *start,
+					*i - *start), WORD));
 	while (str[*i] == ' ' || str[*i] == '\t')
 		(*i)++;
 	*start = *i;
@@ -11,10 +25,10 @@ static void	extract_word(char *str, int *i, int *start, t_token **head)
 
 t_token	*split_expanded(char *str)
 {
-	t_token *head;
-	int     i;
-	int     start;
-	int     st;
+	t_token	*head;
+	int		i;
+	int		start;
+	int		st;
 
 	head = NULL;
 	i = 0;
@@ -29,45 +43,42 @@ t_token	*split_expanded(char *str)
 			i++;
 	}
 	if (i > start)
-		add_token_back(&head, new_token(ft_substr(str, start, i - start), WORD));
+		add_token_back(&head, new_token(ft_substr(str, start,
+					i - start), WORD));
 	return (head);
 }
 
-void	insert_split_tokens(t_token **head, t_token *curr, t_token *sub)
+void	insert_split_tokens(t_token **head, t_token *curr,
+	t_token *sub)
 {
-	t_token	*prev = *head;
-	t_token	*sub_last = sub;
-	t_token	*node;
+	t_token	*prev;
+	t_token	*sub_last;
 
-	prev = *head;
 	sub_last = sub;
-	if (sub)
-	{
-		node = sub;
-		while (sub_last->next)
-			sub_last = sub_last->next;
-	}
+	while (sub_last && sub_last->next)
+		sub_last = sub_last->next;
+	if (sub_last)
+		sub_last->next = curr->next;
 	else
-		node = curr->next;
+		sub = curr->next;
+	prev = *head;
 	if (prev == curr)
-		*head = node;
+		*head = sub;
 	else
 	{
 		while (prev && prev->next != curr)
 			prev = prev->next;
 		if (prev)
-			prev->next = node;
+			prev->next = sub;
 	}
-	if (sub && sub_last)
-		sub_last->next = curr->next;
 	free(curr->value);
 	free(curr);
 }
 
 int	has_unquoted_space(char *str)
 {
-	int i;
-	int st;
+	int	i;
+	int	st;
 
 	i = 0;
 	st = 0;

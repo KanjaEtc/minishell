@@ -6,7 +6,6 @@ LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 SOURCES = sources/minishell.c \
-		  sources/debug_utils.c \
 		  sources/env/env_set.c \
 		  sources/env/env_utils.c \
 		  sources/env/env_utils_bis.c \
@@ -15,7 +14,8 @@ SOURCES = sources/minishell.c \
 		  sources/exec/env.c \
 		  sources/exec/exit.c \
 		  sources/exec/exec_cmd.c \
-		  sources/exec/exec_cmd_bis.c \
+		  sources/exec/exec_cmd_utils.c \
+		  sources/exec/exec_cmd_utils_bis.c \
 		  sources/exec/export.c \
 		  sources/exec/pwd.c \
 		  sources/exec/unset.c \

@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 20:00:23 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 20:00:23 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-int env_builtin(t_env *env)
+int	env_builtin(t_env *env)
 {
-	t_env *current;
-	
+	t_env	*current;
+
 	current = env;
 	while (current)
 	{
