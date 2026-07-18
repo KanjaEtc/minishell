@@ -74,7 +74,7 @@ int	exit_builtin(char **args)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(args[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
-		exit(255);
+		exit(2);
 	}
 	if (args[2] != NULL)
 	{

@@ -78,7 +78,7 @@ t_env	*empty_env(void)
 
 	pwd = create_env_node("PWD", getcwd(NULL, 0));
 	shlvl = create_env_node("SHLVL", ft_strdup("1"));
-	path = create_env_node("PATH", ft_strdup("/usr/local/bin:/usr/bin:/bin"));
+	path = create_env_node("_", ft_strdup("/usr/local/bin:/usr/bin:/bin"));
 	
 	if (!pwd || !shlvl || !path)
 		return (free_env(pwd), free_env(shlvl), free_env(path), NULL);

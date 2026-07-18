@@ -44,7 +44,7 @@ static int	execute_export(t_env **env_list, char *key, char *val, int has_sep)
 		ft_add_env_back(env_list, new);
 	else
 		free(val);
-	return (new == NULL);
+	return (0);
 }
 
 int	export_builtin(char *env_str, t_env **env_list)

@@ -51,6 +51,8 @@ int	cd_builtin(t_env *env, char **args)
 	char cwd[1024];
 	char old_cwd[1024];
 
+	if (args[2])
+		return (ft_putendl_fd("minishell: cd: too many arguments", 2), 1);
 	if (!getcwd(old_cwd, sizeof(old_cwd)))
 		old_cwd[0] = '\0';
 	if (args[1] == NULL || ft_strcmp(args[1], "~") == 0)
