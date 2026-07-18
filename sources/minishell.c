@@ -1,32 +1,32 @@
 #include "../includes/minishell.h"
 #include "../includes/debug_utils.h"
 
-static char	*get_next_line_fallback(int fd)
-{
-	char	buf[2];
-	char	*line;
-	char	*temp;
-	int		bytes;
+// static char	*get_next_line_fallback(int fd)
+// {
+// 	char	buf[2];
+// 	char	*line;
+// 	char	*temp;
+// 	int		bytes;
 
-	line = ft_strdup("");
-	if (!line)
-		return (NULL);
-	while (1)
-	{
-		bytes = read(fd, buf, 1);
-		if (bytes <= 0)
-			break ;
-		buf[1] = '\0';
-		if (buf[0] == '\n')
-			break ;
-		temp = ft_strjoin(line, buf);
-		free(line);
-		line = temp;
-	}
-	if (bytes <= 0 && ft_strlen(line) == 0)
-		return (free(line), NULL);
-	return (line);
-}
+// 	line = ft_strdup("");
+// 	if (!line)
+// 		return (NULL);
+// 	while (1)
+// 	{
+// 		bytes = read(fd, buf, 1);
+// 		if (bytes <= 0)
+// 			break ;
+// 		buf[1] = '\0';
+// 		if (buf[0] == '\n')
+// 			break ;
+// 		temp = ft_strjoin(line, buf);
+// 		free(line);
+// 		line = temp;
+// 	}
+// 	if (bytes <= 0 && ft_strlen(line) == 0)
+// 		return (free(line), NULL);
+// 	return (line);
+// }
 
 static void	run_shell_loop(t_env **env)
 {
@@ -37,10 +37,10 @@ static void	run_shell_loop(t_env **env)
 	while (1)
 	{
 		setup_signals();
-		if (isatty(STDIN_FILENO))
+		// if (isatty(STDIN_FILENO))
 			line = readline("minishell> ");
-		else
-			line = get_next_line_fallback(STDIN_FILENO);
+		// else
+		// 	line = get_next_line_fallback(STDIN_FILENO);
 		if (!line)
 		{
 			if (isatty(STDIN_FILENO))
