@@ -46,14 +46,17 @@ static void	process_line(char *line, t_shell *shell)
 				shell->cmds = NULL;
 				return ; // Stoppe l'exécution de la commande suite au Ctrl+C
 			}
-			exec_all_heredocs(shell->cmds);
 			execute_parsed_commands(shell->cmds, &shell->env);
 			unlink_temporary_heredocs(shell->cmds);
 			free_cmd_table(shell->cmds);
 			shell->cmds = NULL;
 		}
+		if (shell->tokens)
+		{
+			free_token(&shell->tokens);
+			shell->tokens = NULL;
+		}
 	}
-	free_token(&shell->tokens);
 }
 
 static void	run_shell_loop(t_shell *shell)

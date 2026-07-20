@@ -73,4 +73,5 @@ void	free_token(t_token **list)
 		free(*list);
 		*list = tmp;
 	}
+	*list = NULL;
 }
