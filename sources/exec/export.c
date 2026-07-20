@@ -77,3 +77,21 @@ int	export_builtin(char *env_str, t_env **env_list)
 		val = ft_strdup(sep + 1);
 	return (execute_export(env_list, key, val, (sep != NULL)));
 }
+
+int	dispatch_export(t_cmd *cmd, t_env **env)
+{
+	int	i;
+	int	ret;
+
+	i = 1;
+	ret = 0;
+	if (!cmd->args[1])
+		return (export_no_args(*env));
+	while (cmd->args[i])
+	{
+		if (export_builtin(cmd->args[i], env) == 1)
+			ret = 1;
+		i++;
+	}
+	return (ret);
+}

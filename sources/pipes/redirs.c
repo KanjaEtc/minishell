@@ -34,7 +34,7 @@ static int	execute_redir(t_token *curr)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(curr->next->value, 2);
-		ft_putstr_fd(": ambiguous redirect\n", 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		return (-1);
 	}
 	if (curr->type == HEREDOC)

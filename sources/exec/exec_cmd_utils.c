@@ -75,10 +75,6 @@ static void	check_direct_path(char *cmd)
 	exit(127);
 }
 
-/*
-** Parcourt les dossiers du PATH à la recherche du binaire.
-** Note s'il trouve le fichier sans les permissions d'exécution.
-*/
 static char	*search_in_paths(char *cmd, char **env_paths, int *has_perm)
 {
 	int		i;
@@ -100,10 +96,6 @@ static char	*search_in_paths(char *cmd, char **env_paths, int *has_perm)
 	return (NULL);
 }
 
-/*
-** Fonction principale de résolution du chemin.
-** Gère les messages d'erreur et les sorties système (126 vs 127).
-*/
 char	*find_executable_path(char *cmd, char **env_paths)
 {
 	char	*path;

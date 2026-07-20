@@ -65,8 +65,15 @@ static void	run_shell_loop(t_env **env)
 		{
 			add_history(line);
 			process_line(line, env);
+			if ((line[0] == 'e' || line[0] == 'E')
+				&& ft_strncmp(line, "exit", 4) == 0
+				&& (line[4] == '\0' || line[4] == ' ' || line[4] == '\t'))
+			{
+				free(line);
+				break ;
+			}
+			free(line);
 		}
-		free(line);
 	}
 }
 
@@ -85,5 +92,5 @@ int	main(int ac, char **av, char **envp)
 	run_shell_loop(&env);
 	rl_clear_history();
 	free_env(env);
-	return (0);
+	return (g_var);
 }

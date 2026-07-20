@@ -41,6 +41,7 @@ void	free_token(t_token **list);
 /*************ENV_SET*******************/
 t_env	*fill_env(char *env_str, t_env *env);
 t_env	*init_env(char **envp);
+void	*free_env(t_env *env);
 t_env	*empty_env(void);
 t_env	*env_set(char **envp);
 
@@ -48,12 +49,11 @@ t_env	*env_set(char **envp);
 void	ft_add_env_back(t_env **list, t_env *new_node);
 char	*ft_get_env(char *key, t_env *env_list);
 void	print_env(t_env *env);
-void	*free_env(t_env *env);
 char	**env_to_envp(t_env *env);
-t_env	*create_env_node(char *key, char *value);
 
-/*************ENV_UTILS*****************/
+/*************ENV_UTILS_BIS**************/
 int		is_valid_identifier(char *str, int is_unset);
+t_env	*create_env_node(char *key, char *value);
 
 /***************EXPANDER_UTILS***********/
 int		is_valid_var_char(char c);
@@ -72,14 +72,21 @@ char	*strip_quotes(char *str);
 void	clean_all_tokens(t_token *tokens);
 
 /***************BUILT-INS****************/
+// CD
+int		cd_builtin(t_env *env, char **args);
+// ECHO
+int		echo_builtin(char **argv);
+// ENV
+int		env_builtin(t_env *env);
+// EXPORT
 int		export_builtin(char *env_str, t_env **env_list);
 int		export_no_args(t_env *env);
-//t_env	*new_env_var(char *arg, t_env **env_list);
-int		env_builtin(t_env *env);
-int		echo_builtin(char **argv);
+int		dispatch_export(t_cmd *cmd, t_env **env);
+// PWD
 int		pwd_builtin(t_env *env);
-int		cd_builtin(t_env *env, char **args);
+// UNSET
 int		unset_builtin(t_env **env, char **keys);
+// EXIT
 int		exit_builtin(char **args, t_env **env);
 
 /***************SIGNALS****************/
@@ -92,7 +99,7 @@ void	setup_child_signals(void);
 int		is_builtin(char *cmd);
 int		exec_builtin(t_cmd *cmd, t_env **env);
 void	exec_cmd(t_cmd *cmd, t_env **env);
-char	*get_path(char *cmd, t_env *env);
+// char	*get_path(char *cmd, t_env *env);
 void	exec_simple_cmd(t_cmd *cmd, t_env *env);
 char	*find_executable_path(char *cmd, char **env_paths);
 char	*build_path(char *dir, char *cmd);
