@@ -56,7 +56,7 @@ static int	count_env(t_env *env)
 	return (count);
 }
 
-static void	free_envp(char **envp, int i)
+void	free_envp(char **envp, int i)
 {
 	if (!envp)
 		return ;

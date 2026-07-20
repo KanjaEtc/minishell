@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marotsen <marotsen@learner.42.tech>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/20 22:07:05 by marotsen          #+#    #+#             */
+/*   Updated: 2026/07/20 22:07:15 by marotsen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	clean_shell(t_shell *shell)
@@ -15,7 +27,7 @@ void	clean_shell(t_shell *shell)
 	free(shell);
 }
 
-void	free_envp(char **envp)
+void	free_envp2(char **envp)
 {
 	int	i;
 
@@ -54,4 +66,21 @@ void	clean_and_exit(int status)
 	clean_shell(shell);
 	rl_clear_history();
 	exit(status);
+}
+
+void	free_token(t_token **list)
+{
+	t_token	*tmp;
+
+	if (!list || !*list)
+		return ;
+	while (*list)
+	{
+		tmp = (*list)->next;
+		if ((*list)->value)
+			free((*list)->value);
+		free(*list);
+		*list = tmp;
+	}
+	*list = NULL;
 }

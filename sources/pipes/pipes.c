@@ -6,7 +6,7 @@
 /*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 20:20:13 by ranoumba          #+#    #+#             */
-/*   Updated: 2026/07/18 21:26:37 by ranoumba         ###   ########.fr       */
+/*   Updated: 2026/07/20 21:38:54 by marotsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,28 @@ void	execute_pipeline(t_cmd *cmd_list, t_env **env)
 		cmd_list = cmd_list->next;
 	}
 	wait_pipeline(last_pid);
+}
+
+int	handle_heredoc(char *limiter)
+{
+	char	*line;
+	int		pipe_fd[2];
+
+	if (pipe(pipe_fd) == -1)
+		return (-1);
+	while (1)
+	{
+		line = read_heredoc_line();
+		if (!line)
+			break ;
+		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
+		{
+			free(line);
+			break ;
+		}
+		ft_putendl_fd(line, pipe_fd[1]);
+		free(line);
+	}
+	close(pipe_fd[1]);
+	return (pipe_fd[0]);
 }

@@ -35,7 +35,7 @@ static int	is_num(char *str)
 	return (1);
 }
 
-static void	close_extra_fds(void)
+void	close_extra_fds(void)
 {
 	int	fd;
 

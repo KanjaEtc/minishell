@@ -6,6 +6,7 @@ LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 SOURCES = sources/minishell.c \
+		  sources/cleanup.c \
 		  sources/env/env_set.c \
 		  sources/env/env_utils.c \
 		  sources/env/env_utils_bis.c \

@@ -53,13 +53,13 @@ void	exec_simple_cmd(t_cmd *cmd, t_env *env)
 		paths = ft_split(env->value, ':');
 	ret = find_executable_path(cmd->args[0], paths, &path);
 	if (ret != 0)
-		(free_split(paths), free_envp(envp), clean_and_exit(ret));
+		(free_split(paths), free_envp2(envp), clean_and_exit(ret));
 	execve(path, cmd->args, envp);
 	perror("minishell");
-	(free_split(paths), free(path), free_envp(envp), clean_and_exit(126));
+	(free_split(paths), free(path), free_envp2(envp), clean_and_exit(126));
 }
 
-static int	check_direct_path(char *cmd)
+int	check_direct_path(char *cmd)
 {
 	int	ret;
 
@@ -81,7 +81,7 @@ static int	check_direct_path(char *cmd)
 	return (127);
 }
 
-static char	*search_in_paths(char *cmd, char **env_paths, int *has_perm)
+char	*search_in_paths(char *cmd, char **env_paths, int *has_perm)
 {
 	int		i;
 	char	*full_path;

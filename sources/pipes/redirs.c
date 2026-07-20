@@ -6,7 +6,7 @@
 /*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 20:11:44 by ranoumba          #+#    #+#             */
-/*   Updated: 2026/07/18 20:11:45 by ranoumba         ###   ########.fr       */
+/*   Updated: 2026/07/20 21:39:05 by marotsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,24 @@ int	apply_redirections(t_token *redirs)
 			curr = curr->next;
 	}
 	return (0);
+}
+
+void	unlink_temporary_heredocs(t_cmd *cmds)
+{
+	t_cmd	*curr_cmd;
+	t_token	*curr_redir;
+
+	curr_cmd = cmds;
+	while (curr_cmd)
+	{
+		curr_redir = curr_cmd->redirs;
+		while (curr_redir)
+		{
+			if (curr_redir->type == RED_IN && ft_strncmp(curr_redir->value,
+					"/tmp/.minishell_hd_", 19) == 0)
+				unlink(curr_redir->value);
+			curr_redir = curr_redir->next;
+		}
+		curr_cmd = curr_cmd->next;
+	}
 }

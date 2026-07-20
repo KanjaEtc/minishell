@@ -6,7 +6,7 @@
 /*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 20:08:36 by ranoumba          #+#    #+#             */
-/*   Updated: 2026/07/18 20:08:36 by ranoumba         ###   ########.fr       */
+/*   Updated: 2026/07/20 21:40:37 by marotsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void	setup_child_signals(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-void handle_sigint_heredoc(int sig)
+void	handle_sigint_heredoc(int sig)
 {
-    (void)sig;
-    write(1, "\n", 1);
-    clean_and_exit(130);
+	(void)sig;
+	write(1, "\n", 1);
+	clean_and_exit(130);
 }

@@ -58,20 +58,3 @@ void	assign_token_types(t_token *token_list)
 		current = current->next;
 	}
 }
-
-void	free_token(t_token **list)
-{
-	t_token	*tmp;
-
-	if (!list || !*list)
-		return ;
-	while (*list)
-	{
-		tmp = (*list)->next;
-		if ((*list)->value)
-			free((*list)->value);
-		free(*list);
-		*list = tmp;
-	}
-	*list = NULL;
-}

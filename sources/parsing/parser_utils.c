@@ -12,23 +12,23 @@
 
 #include "../../includes/minishell.h"
 
-static void	free_redir_pair(t_token *curr)
-{
-	t_token	*file;
+// static void	free_redir_pair(t_token *curr)
+// {
+// 	t_token	*file;
 
-	if (!curr)
-		return ;
-	file = curr->next;
-	if (curr->value)
-		free(curr->value);
-	free(curr);
-	if (file)
-	{
-		if (file->value)
-			free(file->value);
-		free(file);
-	}
-}
+// 	if (!curr)
+// 		return ;
+// 	file = curr->next;
+// 	if (curr->value)
+// 		free(curr->value);
+// 	free(curr);
+// 	if (file)
+// 	{
+// 		if (file->value)
+// 			free(file->value);
+// 		free(file);
+// 	}
+// }
 
 static void	free_redirs(t_token **redirs)
 {

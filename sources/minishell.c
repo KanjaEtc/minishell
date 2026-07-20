@@ -6,7 +6,7 @@
 /*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 19:43:10 by ranoumba          #+#    #+#             */
-/*   Updated: 2026/07/18 19:43:10 by ranoumba         ###   ########.fr       */
+/*   Updated: 2026/07/20 22:08:20 by marotsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,41 +22,41 @@ static void	execute_parsed_commands(t_cmd *cmds, t_env **env)
 	unlink_temporary_heredocs(cmds);
 }
 
+static void	run_cmds(t_shell *shell)
+{
+	if (exec_all_heredocs(shell->cmds) == -1)
+	{
+		free_cmd_table(shell->cmds);
+		shell->cmds = NULL;
+		return ;
+	}
+	execute_parsed_commands(shell->cmds, &shell->env);
+	unlink_temporary_heredocs(shell->cmds);
+	free_cmd_table(shell->cmds);
+	shell->cmds = NULL;
+}
+
 static void	process_line(char *line, t_shell *shell)
 {
 	if (!line || !*line)
 		return ;
-	if (unclosed_quote(line) && (g_var = 2))
+	if (unclosed_quote(line))
 	{
+		g_var = 2;
 		ft_putstr_fd("minishell: syntax error: unclosed quote\n", 2);
 		return ;
 	}
 	shell->tokens = lexer(line);
-	if (shell->tokens && !check_syntax_errors(shell->tokens))
-	{
-		expand_tokens(&shell->tokens, shell->env);
-		clean_empty_tokens(&shell->tokens);
-		clean_all_tokens(shell->tokens);
-		shell->cmds = parse_tokens(shell->tokens);
-		if (shell->cmds)
-		{
-			if (exec_all_heredocs(shell->cmds) == -1)
-			{
-				free_cmd_table(shell->cmds);
-				shell->cmds = NULL;
-				return ; // Stoppe l'exécution de la commande suite au Ctrl+C
-			}
-			execute_parsed_commands(shell->cmds, &shell->env);
-			unlink_temporary_heredocs(shell->cmds);
-			free_cmd_table(shell->cmds);
-			shell->cmds = NULL;
-		}
-		if (shell->tokens)
-		{
-			free_token(&shell->tokens);
-			shell->tokens = NULL;
-		}
-	}
+	if (!shell->tokens || check_syntax_errors(shell->tokens))
+		return ;
+	expand_tokens(&shell->tokens, shell->env);
+	clean_empty_tokens(&shell->tokens);
+	clean_all_tokens(shell->tokens);
+	shell->cmds = parse_tokens(shell->tokens);
+	if (shell->cmds)
+		run_cmds(shell);
+	if (shell->tokens)
+		free_token(&shell->tokens);
 }
 
 static void	run_shell_loop(t_shell *shell)
@@ -73,7 +73,7 @@ static void	run_shell_loop(t_shell *shell)
 				ft_putstr_fd("exit\n", 1);
 			break ;
 		}
-		if (*line)	
+		if (*line)
 		{
 			add_history(line);
 			process_line(line, shell);
@@ -81,15 +81,6 @@ static void	run_shell_loop(t_shell *shell)
 		free(line);
 		shell->line = NULL;
 	}
-}
-
-t_shell	*get_shell(t_shell *set_shell)
-{
-	static t_shell	*shell_ptr = NULL;
-
-	if (set_shell)
-		shell_ptr = set_shell;
-	return (shell_ptr);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -102,10 +93,7 @@ int	main(int ac, char **av, char **envp)
 	if (!shell)
 		return (1);
 	ft_bzero(shell, sizeof(t_shell));
-	
-	// Enregistre l'instance globale
 	get_shell(shell);
-
 	shell->env = env_set(envp);
 	if (!shell->env)
 	{

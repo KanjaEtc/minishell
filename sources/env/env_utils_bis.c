@@ -44,3 +44,12 @@ t_env	*create_env_node(char *key, char *value)
 	node->next = NULL;
 	return (node);
 }
+
+t_shell	*get_shell(t_shell *set_shell)
+{
+	static t_shell	*shell_ptr = NULL;
+
+	if (set_shell)
+		shell_ptr = set_shell;
+	return (shell_ptr);
+}
