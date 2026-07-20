@@ -6,7 +6,7 @@
 /*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 20:03:49 by ranoumba          #+#    #+#             */
-/*   Updated: 2026/07/18 20:03:49 by ranoumba         ###   ########.fr       */
+/*   Updated: 2026/07/20 21:20:57 by marotsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,6 @@ int	is_builtin(char *cmd)
 	else if (ft_strcmp(cmd, "exit") == 0)
 		return (1);
 	return (0);
-}
-
-void	clean_shell(t_shell *shell)
-{
-	if (!shell)
-		return ;
-	if (shell->line)
-		free(shell->line);
-	if (shell->tokens)
-		free_token(&shell->tokens);
-	if (shell->cmds)
-		free_cmd_table(shell->cmds);
-	if (shell->env)
-		free_env(shell->env);
-	free(shell);
 }
 
 void	exec_single_builtin(t_cmd *cmd, t_env **env)
@@ -90,4 +75,40 @@ int	exec_builtin(t_cmd *cmd, t_env **env)
 	if (ft_strcmp(cmd->args[0], "exit") == 0)
 		return (exit_builtin(cmd->args, env));
 	return (0);
+}
+
+static int	print_cmd_error(char *cmd, int has_perm)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd, 2);
+	if (has_perm)
+	{
+		ft_putstr_fd(": Permission denied\n", 2);
+		return (126);
+	}
+	ft_putstr_fd(": command not found\n", 2);
+	return (127);
+}
+
+int	find_executable_path(char *cmd, char **env_paths, char **path)
+{
+	int	ret;
+	int	has_perm;
+
+	has_perm = 0;
+	*path = NULL;
+	if (ft_strchr(cmd, '/'))
+	{
+		ret = check_direct_path(cmd);
+		if (ret != 0)
+			return (ret);
+		*path = ft_strdup(cmd);
+		if (!*path)
+			return (126);
+		return (0);
+	}
+	*path = search_in_paths(cmd, env_paths, &has_perm);
+	if (*path)
+		return (0);
+	return (print_cmd_error(cmd, has_perm));
 }

@@ -15,21 +15,22 @@
 t_env	*fill_env(char *env_str, t_env *env)
 {
 	char	*sep;
-	size_t	key_len;
 
-	env->key = NULL;
-	env->value = NULL;
+	if (!env_str || !env)
+		return (NULL);
 	sep = ft_strchr(env_str, '=');
 	if (!sep)
-		return (NULL);
-	key_len = sep - env_str;
-	env->key = malloc(key_len + 1);
-	if (!env->key)
-		return (NULL);
-	ft_strlcpy(env->key, env_str, key_len + 1);
-	env->value = ft_strdup(sep + 1);
-	if (!env->value)
-		return (NULL);
+	{
+		env->key = ft_strdup(env_str);
+		env->value = NULL;
+	}
+	else
+	{
+		env->key = ft_substr(env_str, 0, sep - env_str);
+		env->value = ft_strdup(sep + 1);
+	}
+	if (!env->key || (sep && !env->value))
+		return (free(env->key), env->key = NULL, NULL);
 	return (env);
 }
 

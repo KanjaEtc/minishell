@@ -48,16 +48,6 @@ static void	close_extra_fds(void)
 	}
 }
 
-void	clean_and_exit(int status)
-{
-	t_shell	*shell;
-
-	shell = get_shell(NULL);
-	close_extra_fds();
-	clean_shell(shell);
-	rl_clear_history();
-	exit(status);
-}
 int	exit_builtin(char **args, t_env **env)
 {
 	int	code;

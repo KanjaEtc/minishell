@@ -38,26 +38,15 @@ static int	execute_export(t_env **env_list, char *key, char *val, int has_sep)
 	if (curr)
 	{
 		if (has_sep)
-		{
-			free(curr->value);
-			curr->value = val;
-		}
+			(free(curr->value), curr->value = val);
 		else
 			free(val);
-		free(key);
+		return (free(key), 0);
 	}
-	else
-	{
-		curr = create_env_node(key, val);
-		if (curr)
-			ft_add_env_back(env_list, curr);
-		else
-		{
-			free(val);
-			free(key);
-			return (1);
-		}
-	}
+	curr = create_env_node(key, val);
+	if (!curr)
+		return (free(key), free(val), 1);
+	ft_add_env_back(env_list, curr);
 	return (0);
 }
 

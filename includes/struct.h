@@ -6,7 +6,7 @@
 /*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 19:25:16 by ranoumba          #+#    #+#             */
-/*   Updated: 2026/07/18 19:25:16 by ranoumba         ###   ########.fr       */
+/*   Updated: 2026/07/20 20:57:06 by marotsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,11 @@ typedef struct s_cmd
 
 typedef struct s_shell
 {
-    t_env   *env;
-    t_token *tokens;
-    t_cmd   *cmds;
-    char    *line;
-    int     exit_code;
-}   t_shell;
+	t_env	*env;
+	t_token	*tokens;
+	t_cmd	*cmds;
+	char	*line;
+	int		exit_code;
+}	t_shell;
 
 #endif

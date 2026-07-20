@@ -6,7 +6,7 @@
 /*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 20:40:55 by ranoumba          #+#    #+#             */
-/*   Updated: 2026/07/18 20:40:56 by ranoumba         ###   ########.fr       */
+/*   Updated: 2026/07/20 21:28:58 by marotsen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,37 +32,71 @@ t_token	*copy_token(t_token *src)
 	return (dst);
 }
 
-void	add_redir_node(t_token **redirs, t_token *curr)
+static t_token	*create_redir_pair(t_token *curr)
 {
 	t_token	*redir;
-	t_token	*file;
-	t_token	*last;
 
-	file = NULL;
 	redir = copy_token(curr);
 	if (!redir)
-		return ;
+		return (NULL);
 	if (curr->next)
 	{
-		file = copy_token(curr->next);
-		if (!file)
+		redir->next = copy_token(curr->next);
+		if (!redir->next)
 		{
 			free(redir->value);
 			free(redir);
-			return ;
+			return (NULL);
 		}
 	}
-	redir->next = file;
+	return (redir);
+}
+
+void	add_redir_node(t_token **redirs, t_token *curr)
+{
+	t_token	*node;
+	t_token	*last;
+
+	node = create_redir_pair(curr);
+	if (!node)
+		return ;
 	if (!*redirs)
 	{
-		*redirs = redir;
+		*redirs = node;
 		return ;
 	}
 	last = *redirs;
-	while (last->next && last->next->next)
-		last = last->next->next;
-	if (last->next)
-		last->next->next = redir;
-	else
-		last->next = redir;
+	while (last->next)
+		last = last->next;
+	last->next = node;
+}
+
+t_cmd	*lst_new_cmd(void)
+{
+	t_cmd	*cmds;
+
+	cmds = malloc(sizeof(t_cmd));
+	if (!cmds)
+		return (NULL);
+	cmds->args = NULL;
+	cmds->redirs = NULL;
+	cmds->next = NULL;
+	return (cmds);
+}
+
+void	add_cmd_back(t_cmd **list, t_cmd *new_cmd)
+{
+	t_cmd	*last;
+
+	if (!list || !new_cmd)
+		return ;
+	if (*list == NULL)
+	{
+		*list = new_cmd;
+		return ;
+	}
+	last = *list;
+	while (last->next)
+		last = last->next;
+	last->next = new_cmd;
 }
