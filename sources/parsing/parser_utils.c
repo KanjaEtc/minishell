@@ -25,6 +25,40 @@ t_cmd	*lst_new_cmd(void)
 	return (cmds);
 }
 
+static void	free_redir_pair(t_token *curr)
+{
+	t_token	*file;
+
+	if (!curr)
+		return ;
+	file = curr->next;
+	if (curr->value)
+		free(curr->value);
+	free(curr);
+	if (file)
+	{
+		if (file->value)
+			free(file->value);
+		free(file);
+	}
+}
+
+static void	free_redirs(t_token **redirs)
+{
+	t_token	*curr;
+	t_token	*file;
+
+	if (!redirs || !*redirs)
+		return ;
+	while (*redirs)
+	{
+		curr = *redirs;
+		file = curr->next;
+		*redirs = file ? file->next : NULL;
+		free_redir_pair(curr);
+	}
+}
+
 void	free_cmd_table(t_cmd *cmd)
 {
 	t_cmd	*tmp;
@@ -43,6 +77,8 @@ void	free_cmd_table(t_cmd *cmd)
 			}
 			free(cmd->args);
 		}
+		if (cmd->redirs)
+			free_redirs(&cmd->redirs);
 		free(cmd);
 		cmd = tmp;
 	}

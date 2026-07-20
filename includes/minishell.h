@@ -101,7 +101,7 @@ int		exec_builtin(t_cmd *cmd, t_env **env);
 void	exec_cmd(t_cmd *cmd, t_env **env);
 // char	*get_path(char *cmd, t_env *env);
 void	exec_simple_cmd(t_cmd *cmd, t_env *env);
-char	*find_executable_path(char *cmd, char **env_paths);
+int		find_executable_path(char *cmd, char **env_paths, char **path);
 char	*build_path(char *dir, char *cmd);
 void	exec_single_builtin(t_cmd *cmd, t_env **env);
 

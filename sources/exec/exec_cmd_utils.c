@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-static void	check_directory_or_error(char *cmd)
+static int	check_directory_or_error(char *cmd)
 {
 	struct stat	path_stat;
 
@@ -23,7 +23,7 @@ static void	check_directory_or_error(char *cmd)
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(cmd, 2);
 			ft_putendl_fd(": Is a directory", 2);
-			exit(126);
+			return (126);
 		}
 	}
 	if (access(cmd, F_OK) != 0)
@@ -31,8 +31,39 @@ static void	check_directory_or_error(char *cmd)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd, 2);
 		ft_putendl_fd(": No such file or directory", 2);
-		exit(127);
+		return (127);
 	}
+	return (0);
+}
+
+static void	free_split(char **split)
+{
+	int	i;
+
+	if (!split)
+		return ;
+	i = 0;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
+
+static void	free_envp(char **envp)
+{
+	int	i;
+
+	if (!envp)
+		return ;
+	i = 0;
+	while (envp[i])
+	{
+		free(envp[i]);
+		i++;
+	}
+	free(envp);
 }
 
 void	exec_simple_cmd(t_cmd *cmd, t_env *env)
@@ -40,6 +71,7 @@ void	exec_simple_cmd(t_cmd *cmd, t_env *env)
 	char	*path;
 	char	**envp;
 	char	**paths;
+	int		ret;
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		exit(0);
@@ -51,28 +83,41 @@ void	exec_simple_cmd(t_cmd *cmd, t_env *env)
 			paths = ft_split(env->value, ':');
 		env = env->next;
 	}
-	path = find_executable_path(cmd->args[0], paths);
+	ret = find_executable_path(cmd->args[0], paths, &path);
+	if (ret != 0)
+	{
+		free_split(paths);
+		free_envp(envp);
+		exit(ret);
+	}
 	execve(path, cmd->args, envp);
 	perror("minishell");
+	free_split(paths);
+	free(path);
+	free_envp(envp);
 	exit(126);
 }
 
-static void	check_direct_path(char *cmd)
+static int	check_direct_path(char *cmd)
 {
-	check_directory_or_error(cmd);
+	int	ret;
+
+	ret = check_directory_or_error(cmd);
+	if (ret != 0)
+		return (ret);
 	if (access(cmd, F_OK) == 0)
 	{
 		if (access(cmd, X_OK) == 0)
-			return ;
+			return (0);
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd, 2);
 		ft_putstr_fd(": Permission denied\n", 2);
-		exit(126);
+		return (126);
 	}
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(": No such file or directory\n", 2);
-	exit(127);
+	return (127);
 }
 
 static char	*search_in_paths(char *cmd, char **env_paths, int *has_perm)
@@ -96,27 +141,33 @@ static char	*search_in_paths(char *cmd, char **env_paths, int *has_perm)
 	return (NULL);
 }
 
-char	*find_executable_path(char *cmd, char **env_paths)
+int	find_executable_path(char *cmd, char **env_paths, char **path)
 {
-	char	*path;
+	int		ret;
 	int		has_perm;
 
 	has_perm = 0;
+	*path = NULL;
 	if (ft_strchr(cmd, '/'))
 	{
-		check_direct_path(cmd);
-		return (ft_strdup(cmd));
+		ret = check_direct_path(cmd);
+		if (ret != 0)
+			return (ret);
+		*path = ft_strdup(cmd);
+		if (!*path)
+			return (126);
+		return (0);
 	}
-	path = search_in_paths(cmd, env_paths, &has_perm);
-	if (path)
-		return (path);
+	*path = search_in_paths(cmd, env_paths, &has_perm);
+	if (*path)
+		return (0);
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
 	if (has_perm)
 	{
 		ft_putstr_fd(": Permission denied\n", 2);
-		exit(126);
+		return (126);
 	}
 	ft_putstr_fd(": command not found\n", 2);
-	exit(127);
+	return (127);
 }

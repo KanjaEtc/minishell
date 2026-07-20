@@ -61,10 +61,10 @@ static void	free_envp(char **envp, int i)
 	if (!envp)
 		return ;
 	i = 0;
-	while (i >= 0 && envp[i])
+	while (envp[i])
 	{
 		free(envp[i]);
-		i--;
+		i++;
 	}
 	free(envp);
 }

@@ -22,6 +22,8 @@ t_token	*copy_token(t_token *src)
 	if (!dst)
 		return (NULL);
 	dst->type = src->type;
+	dst->was_quoted = src->was_quoted;
+	dst->invalid_redir = src->invalid_redir;
 	if (!src->value)
 		dst->value = NULL;
 	else
@@ -38,8 +40,18 @@ void	add_redir_node(t_token **redirs, t_token *curr)
 
 	file = NULL;
 	redir = copy_token(curr);
+	if (!redir)
+		return ;
 	if (curr->next)
+	{
 		file = copy_token(curr->next);
+		if (!file)
+		{
+			free(redir->value);
+			free(redir);
+			return ;
+		}
+	}
 	redir->next = file;
 	if (!*redirs)
 	{
@@ -47,7 +59,10 @@ void	add_redir_node(t_token **redirs, t_token *curr)
 		return ;
 	}
 	last = *redirs;
-	while (last->next)
-		last = last->next;
-	last->next = redir;
+	while (last->next && last->next->next)
+		last = last->next->next;
+	if (last->next)
+		last->next->next = redir;
+	else
+		last->next = redir;
 }
