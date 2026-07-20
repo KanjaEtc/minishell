@@ -24,27 +24,36 @@ static void	execute_parsed_commands(t_cmd *cmds, t_env **env)
 
 static void	process_line(char *line, t_shell *shell)
 {
-	shell->line = line;
-	shell->tokens = lexer(line);
-	if (!shell->tokens)
+	if (!line || !*line)
 		return ;
-	if (check_syntax_errors(shell->tokens))
+	if (unclosed_quote(line) && (g_var = 2))
 	{
-		free_token(&shell->tokens);
+		ft_putstr_fd("minishell: syntax error: unclosed quote\n", 2);
 		return ;
 	}
-	expand_tokens(&shell->tokens, shell->env);
-	clean_empty_tokens(&shell->tokens);
-	clean_all_tokens(shell->tokens);
-	shell->cmds = parse_tokens(shell->tokens);
-	if (shell->cmds)
+	shell->tokens = lexer(line);
+	if (shell->tokens && !check_syntax_errors(shell->tokens))
 	{
-		execute_parsed_commands(shell->cmds, &shell->env);
-		free_cmd_table(shell->cmds);
-		shell->cmds = NULL;
+		expand_tokens(&shell->tokens, shell->env);
+		clean_empty_tokens(&shell->tokens);
+		clean_all_tokens(shell->tokens);
+		shell->cmds = parse_tokens(shell->tokens);
+		if (shell->cmds)
+		{
+			if (exec_all_heredocs(shell->cmds) == -1)
+			{
+				free_cmd_table(shell->cmds);
+				shell->cmds = NULL;
+				return ; // Stoppe l'exécution de la commande suite au Ctrl+C
+			}
+			exec_all_heredocs(shell->cmds);
+			execute_parsed_commands(shell->cmds, &shell->env);
+			unlink_temporary_heredocs(shell->cmds);
+			free_cmd_table(shell->cmds);
+			shell->cmds = NULL;
+		}
 	}
 	free_token(&shell->tokens);
-	shell->tokens = NULL;
 }
 
 static void	run_shell_loop(t_shell *shell)

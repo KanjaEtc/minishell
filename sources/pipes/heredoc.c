@@ -6,11 +6,19 @@
 /*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 20:17:22 by ranoumba          #+#    #+#             */
-/*   Updated: 2026/07/18 21:24:36 by ranoumba         ###   ########.fr       */
+/*   Updated: 2026/07/20 18:22:45 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+// static void	handle_hd_sigint(int sig)
+// {
+// 	(void)sig;
+// 	g_var = 130;
+// 	rl_done = 1;
+// 	rl_stuff_char('\n');
+// }
 
 static char	*read_heredoc_line(void)
 {
@@ -41,19 +49,11 @@ static char	*read_heredoc_line(void)
 	return (line);
 }
 
-static char	*write_heredoc_to_temp(char *limiter, int count)
+static void	child_heredoc_loop(char *limiter, int fd)
 {
-	char	*filename;
-	char	*count_str;
 	char	*line;
-	int		fd;
 
-	count_str = ft_itoa(count);
-	filename = ft_strjoin("/tmp/.minishell_hd_", count_str);
-	free(count_str);
-	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (fd == -1)
-		return (free(filename), NULL);
+	signal(SIGINT, SIG_DFL);
 	while (1)
 	{
 		line = read_heredoc_line();
@@ -66,10 +66,38 @@ static char	*write_heredoc_to_temp(char *limiter, int count)
 		free(line);
 	}
 	close(fd);
+	exit(0);
+}
+
+static char	*write_heredoc_to_temp(char *limiter, int count)
+{
+	char	*filename;
+	char	*count_str;
+	int		status;
+	int		fd;
+	pid_t	pid;
+	
+
+	count_str = ft_itoa(count);
+	filename = ft_strjoin("/tmp/.minishell_hd_", count_str);
+	free(count_str);
+	if (!filename || (fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644)) == -1)
+		return (free(filename), NULL);
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (pid == 0)
+		child_heredoc_loop(limiter, fd);
+	close(fd);
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		g_var = 130;
+		return (unlink(filename), free(filename), NULL);
+	}
 	return (filename);
 }
 
-void	exec_all_heredocs(t_cmd *cmds)
+int	exec_all_heredocs(t_cmd *cmds)
 {
 	t_token		*redir;
 	char		*temp;
@@ -80,20 +108,20 @@ void	exec_all_heredocs(t_cmd *cmds)
 		redir = cmds->redirs;
 		while (redir)
 		{
-			if (redir->type == HEREDOC)
+			if (redir->type == HEREDOC && redir->next)
 			{
-				temp = write_heredoc_to_temp(redir->value, hd_counter++);
+				temp = write_heredoc_to_temp(redir->next->value, hd_counter++);
+				if (!temp && g_var == 130)
+					return (setup_signals(), write(1, "\n", 1), -1);
 				if (temp)
-				{
-					free(redir->value);
-					redir->value = temp;
-					redir->type = RED_IN;
-				}
+					(free(redir->next->value), redir->next->value = temp,
+						redir->type = RED_IN);
 			}
 			redir = redir->next;
 		}
 		cmds = cmds->next;
 	}
+	return (setup_signals(), 0);
 }
 
 void	unlink_temporary_heredocs(t_cmd *cmds)

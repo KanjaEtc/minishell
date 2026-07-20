@@ -124,7 +124,7 @@ void	add_redir_node(t_token **redirs, t_token *curr);
 int		apply_redirections(t_token *redirs);
 void	execute_pipeline(t_cmd *cmd_list, t_env **env);
 int		handle_heredoc(char *limiter);
-void	exec_all_heredocs(t_cmd *cmds);
+int	exec_all_heredocs(t_cmd *cmds);
 void	unlink_temporary_heredocs(t_cmd *cmds);
 
 /*****************SYNTAX_CHEK*****************/
