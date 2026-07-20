@@ -74,7 +74,7 @@ void	exec_simple_cmd(t_cmd *cmd, t_env *env)
 	int		ret;
 
 	if (!cmd || !cmd->args || !cmd->args[0])
-		exit(0);
+		clean_and_exit(0);
 	envp = env_to_envp(env);
 	paths = NULL;
 	while (env)
@@ -88,14 +88,14 @@ void	exec_simple_cmd(t_cmd *cmd, t_env *env)
 	{
 		free_split(paths);
 		free_envp(envp);
-		exit(ret);
+		clean_and_exit(ret);
 	}
 	execve(path, cmd->args, envp);
 	perror("minishell");
 	free_split(paths);
 	free(path);
 	free_envp(envp);
-	exit(126);
+	clean_and_exit(126);
 }
 
 static int	check_direct_path(char *cmd)

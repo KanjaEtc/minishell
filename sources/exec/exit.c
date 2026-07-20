@@ -42,7 +42,8 @@ static void	close_extra_fds(void)
 	fd = 3;
 	while (fd < 1024)
 	{
-		close(fd);
+		if (fcntl(fd, F_GETFD) != -1)
+			close(fd);
 		fd++;
 	}
 }

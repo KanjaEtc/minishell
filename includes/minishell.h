@@ -94,6 +94,9 @@ void	prompt_sigint(int sig);
 void	setup_signals(void);
 void	setup_exec_signals(void);
 void	setup_child_signals(void);
+void    handle_sigint_heredoc(int sig);
+void	clean_and_exit(int status);
+
 
 /**************EXECUTION***************/
 int		is_builtin(char *cmd);

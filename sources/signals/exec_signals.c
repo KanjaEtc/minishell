@@ -23,3 +23,10 @@ void	setup_child_signals(void)
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 }
+
+void handle_sigint_heredoc(int sig)
+{
+    (void)sig;
+    write(1, "\n", 1);
+    clean_and_exit(130);
+}

@@ -49,11 +49,12 @@ static char	*read_heredoc_line(void)
 	return (line);
 }
 
-static void	child_heredoc_loop(char *limiter, int fd)
+static void	child_heredoc_loop(char *limiter, int fd, char *filename)
 {
 	char	*line;
 
-	signal(SIGINT, SIG_DFL);
+	signal(SIGINT, handle_sigint_heredoc);
+	free(filename);
 	while (1)
 	{
 		line = read_heredoc_line();
@@ -66,7 +67,7 @@ static void	child_heredoc_loop(char *limiter, int fd)
 		free(line);
 	}
 	close(fd);
-	exit(0);
+	clean_and_exit(0);
 }
 
 static char	*write_heredoc_to_temp(char *limiter, int count)
@@ -86,7 +87,7 @@ static char	*write_heredoc_to_temp(char *limiter, int count)
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
-		child_heredoc_loop(limiter, fd);
+		child_heredoc_loop(limiter, fd, filename);
 	close(fd);
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
