@@ -35,34 +35,53 @@ static int	is_num(char *str)
 	return (1);
 }
 
-static void	set_exit_status(int code)
+static void	close_extra_fds(void)
 {
-	g_var = code;
+	int	fd;
+
+	fd = 3;
+	while (fd < 1024)
+	{
+		close(fd);
+		fd++;
+	}
 }
 
+void	clean_and_exit(int status)
+{
+	t_shell	*shell;
+
+	shell = get_shell(NULL);
+	close_extra_fds();
+	clean_shell(shell);
+	rl_clear_history();
+	exit(status);
+}
 int	exit_builtin(char **args, t_env **env)
 {
+	int	code;
+
 	(void)env;
 	if (isatty(STDIN_FILENO))
 		ft_putendl_fd("exit", 1);
 	if (!args || !args[1])
 	{
-		set_exit_status(g_var);
-		return (g_var);
+		code = g_var;
+		clean_and_exit(code);
 	}
 	if (!is_num(args[1]))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(args[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
-		set_exit_status(2);
-		return (g_var);
+		clean_and_exit(2);
 	}
 	if (args[2] != NULL)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		return (1);
 	}
-	set_exit_status((unsigned char)ft_atoi(args[1]));
-	return (g_var);
+	code = (unsigned char)ft_atoi(args[1]);
+	clean_and_exit(code);
+	return (code);
 }

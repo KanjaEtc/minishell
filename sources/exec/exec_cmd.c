@@ -33,49 +33,20 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-// static void	free_split(char **split)
-// {
-// 	int	i;
-
-// 	if (!split)
-// 		return ;
-// 	i = 0;
-// 	while (split[i])
-// 	{
-// 		free(split[i]);
-// 		i++;
-// 	}
-// 	free(split);
-// }
-
-// char	*get_path(char *cmd, t_env *env)
-// {
-// 	char	*path_env;
-// 	char	**paths;
-// 	char	*full_path;
-// 	int		i;
-
-// 	path_env = ft_get_env("PATH", env);
-// 	if (!path_env)
-// 		return (NULL);
-// 	paths = ft_split(path_env, ':');
-// 	if (!paths)
-// 		return (NULL);
-// 	i = 0;
-// 	while (paths[i])
-// 	{
-// 		full_path = ft_strjoin_three(paths[i], "/", cmd);
-// 		if (access(full_path, X_OK) == 0)
-// 		{
-// 			free_split(paths);
-// 			return (full_path);
-// 		}
-// 		free(full_path);
-// 		i++;
-// 	}
-// 	free_split(paths);
-// 	return (NULL);
-// }
+void	clean_shell(t_shell *shell)
+{
+	if (!shell)
+		return ;
+	if (shell->line)
+		free(shell->line);
+	if (shell->tokens)
+		free_token(&shell->tokens);
+	if (shell->cmds)
+		free_cmd_table(shell->cmds);
+	if (shell->env)
+		free_env(shell->env);
+	free(shell);
+}
 
 void	exec_single_builtin(t_cmd *cmd, t_env **env)
 {
@@ -85,7 +56,13 @@ void	exec_single_builtin(t_cmd *cmd, t_env **env)
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	if (saved_stdin == -1 || saved_stdout == -1)
+	{
+		if (saved_stdin != -1)
+			close(saved_stdin);
+		if (saved_stdout != -1)
+			close(saved_stdout);
 		return ;
+	}
 	if (apply_redirections(cmd->redirs) != -1)
 		g_var = exec_builtin(cmd, env);
 	else

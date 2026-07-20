@@ -22,32 +22,32 @@ static void	execute_parsed_commands(t_cmd *cmds, t_env **env)
 	unlink_temporary_heredocs(cmds);
 }
 
-static void	process_line(char *line, t_env **env)
+static void	process_line(char *line, t_shell *shell)
 {
-	t_token	*tokens;
-	t_cmd	*cmds;
-
-	tokens = lexer(line);
-	if (!tokens)
+	shell->line = line;
+	shell->tokens = lexer(line);
+	if (!shell->tokens)
 		return ;
-	if (check_syntax_errors(tokens))
+	if (check_syntax_errors(shell->tokens))
 	{
-		free_token(&tokens);
+		free_token(&shell->tokens);
 		return ;
 	}
-	expand_tokens(&tokens, *env);
-	clean_empty_tokens(&tokens);
-	clean_all_tokens(tokens);
-	cmds = parse_tokens(tokens);
-	if (cmds)
+	expand_tokens(&shell->tokens, shell->env);
+	clean_empty_tokens(&shell->tokens);
+	clean_all_tokens(shell->tokens);
+	shell->cmds = parse_tokens(shell->tokens);
+	if (shell->cmds)
 	{
-		execute_parsed_commands(cmds, env);
-		free_cmd_table(cmds);
+		execute_parsed_commands(shell->cmds, &shell->env);
+		free_cmd_table(shell->cmds);
+		shell->cmds = NULL;
 	}
-	free_token(&tokens);
+	free_token(&shell->tokens);
+	shell->tokens = NULL;
 }
 
-static void	run_shell_loop(t_env **env)
+static void	run_shell_loop(t_shell *shell)
 {
 	char	*line;
 
@@ -61,36 +61,49 @@ static void	run_shell_loop(t_env **env)
 				ft_putstr_fd("exit\n", 1);
 			break ;
 		}
-		if (*line)
+		if (*line)	
 		{
 			add_history(line);
-			process_line(line, env);
-			if ((line[0] == 'e' || line[0] == 'E')
-				&& ft_strncmp(line, "exit", 4) == 0
-				&& (line[4] == '\0' || line[4] == ' ' || line[4] == '\t'))
-			{
-				free(line);
-				break ;
-			}
-			free(line);
+			process_line(line, shell);
 		}
+		free(line);
+		shell->line = NULL;
 	}
+}
+
+t_shell	*get_shell(t_shell *set_shell)
+{
+	static t_shell	*shell_ptr = NULL;
+
+	if (set_shell)
+		shell_ptr = set_shell;
+	return (shell_ptr);
 }
 
 int	main(int ac, char **av, char **envp)
 {
-	t_env	*env;
+	t_shell	*shell;
 
 	(void)ac;
 	(void)av;
-	env = env_set(envp);
-	if (!env)
+	shell = malloc(sizeof(t_shell));
+	if (!shell)
+		return (1);
+	ft_bzero(shell, sizeof(t_shell));
+	
+	// Enregistre l'instance globale
+	get_shell(shell);
+
+	shell->env = env_set(envp);
+	if (!shell->env)
 	{
 		perror("Error: Failed to initialize environment variables.\n");
+		free(shell);
 		return (1);
 	}
-	run_shell_loop(&env);
+	run_shell_loop(shell);
 	rl_clear_history();
-	free_env(env);
+	free_env(shell->env);
+	free(shell);
 	return (g_var);
 }

@@ -60,4 +60,13 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
+typedef struct s_shell
+{
+    t_env   *env;
+    t_token *tokens;
+    t_cmd   *cmds;
+    char    *line;
+    int     exit_code;
+}   t_shell;
+
 #endif

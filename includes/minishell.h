@@ -104,6 +104,7 @@ void	exec_simple_cmd(t_cmd *cmd, t_env *env);
 int		find_executable_path(char *cmd, char **env_paths, char **path);
 char	*build_path(char *dir, char *cmd);
 void	exec_single_builtin(t_cmd *cmd, t_env **env);
+void	clean_shell(t_shell *shell);
 
 /*****************PARSER**********************/
 t_cmd	*parse_tokens(t_token *tokens);
@@ -130,4 +131,6 @@ void	unlink_temporary_heredocs(t_cmd *cmds);
 int		check_syntax_errors(t_token *tokens);
 void	insert_split_tokens(t_token **head, t_token *curr, t_token *sub);
 int		has_unquoted_space(char *str);
+t_shell	*get_shell(t_shell *set_shell);
+
 #endif
