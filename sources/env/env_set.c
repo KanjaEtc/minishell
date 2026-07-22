@@ -1,0 +1,107 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_set.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/18 19:50:55 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 19:50:55 by ranoumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
+
+t_env	*fill_env(char *env_str, t_env *env)
+{
+	char	*sep;
+
+	if (!env_str || !env)
+		return (NULL);
+	sep = ft_strchr(env_str, '=');
+	if (!sep)
+	{
+		env->key = ft_strdup(env_str);
+		env->value = NULL;
+	}
+	else
+	{
+		env->key = ft_substr(env_str, 0, sep - env_str);
+		env->value = ft_strdup(sep + 1);
+	}
+	if (!env->key || (sep && !env->value))
+		return (free(env->key), env->key = NULL, NULL);
+	return (env);
+}
+
+t_env	*init_env(char **envp)
+{
+	t_env	*head;
+	t_env	*tail;
+	t_env	*node;
+	int		i;
+
+	head = NULL;
+	tail = NULL;
+	i = 0;
+	while (envp[i])
+	{
+		node = malloc(sizeof(t_env));
+		if (!node)
+			return (free_env(head), NULL);
+		node->next = NULL;
+		if (!fill_env(envp[i], node))
+			return (free_env(node), free_env(head), NULL);
+		if (!head)
+			head = node;
+		else
+			tail->next = node;
+		tail = node;
+		i++;
+	}
+	return (head);
+}
+
+void	*free_env(t_env *env)
+{
+	t_env	*current;
+	t_env	*temp;
+
+	current = env;
+	while (current)
+	{
+		temp = current;
+		current = current->next;
+		if (temp->key)
+			free(temp->key);
+		if (temp->value)
+			free(temp->value);
+		free(temp);
+	}
+	return (NULL);
+}
+
+t_env	*empty_env(void)
+{
+	t_env	*pwd;
+	t_env	*shlvl;
+	t_env	*path;
+
+	pwd = create_env_node("PWD", getcwd(NULL, 0));
+	shlvl = create_env_node("SHLVL", ft_strdup("1"));
+	path = create_env_node("_", ft_strdup("/usr/local/bin:/usr/bin:/bin"));
+	if (!pwd || !shlvl || !path)
+		return (free_env(pwd), free_env(shlvl), free_env(path), NULL);
+	pwd->next = shlvl;
+	shlvl->next = path;
+	path->next = NULL;
+	return (pwd);
+}
+
+t_env	*env_set(char **envp)
+{
+	if (envp && envp[0])
+		return (init_env(envp));
+	else
+		return (empty_env());
+}

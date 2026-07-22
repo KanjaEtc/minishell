@@ -1,31 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/15 18:44:11 by marotsen          #+#    #+#             */
-/*   Updated: 2026/07/17 17:21:58 by ranoumba         ###   ########.fr       */
+/*   Created: 2025/11/13 20:46:39 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/17 17:22:33 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//This function copies up to siz - 1 characters from the string src to dst,
-//null-terminating the result if siz is not 0.
-
 #include "libft.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t siz)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	size_t	srclen;
+	size_t	i;
+	size_t	len_s;
+	char	*tab;
 
-	srclen = ft_strlen(src);
-	if (srclen + 1 < siz)
-		ft_memcpy(dst, src, srclen + 1);
-	else if (siz != 0)
+	if (!s)
+		return (NULL);
+	len_s = ft_strlen((char *)s);
+	if (start >= len_s)
+		return (ft_strdup(""));
+	if (len > len_s - start)
+		len = len_s - start;
+	tab = malloc(sizeof(char) * (len + 1));
+	if (!tab)
+		return (NULL);
+	i = 0;
+	while (i < len)
 	{
-		ft_memcpy(dst, src, siz - 1);
-		dst[siz - 1] = 0;
+		tab[i] = s[start + i];
+		i++;
 	}
-	return (srclen);
+	tab[i] = '\0';
+	return (tab);
 }

@@ -3,37 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ranoumba <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 11:14:45 by ranoumba          #+#    #+#             */
-/*   Updated: 2025/11/17 14:48:38 by ranoumba         ###   ########.fr       */
+/*   Created: 2025/11/11 12:45:13 by marotsen          #+#    #+#             */
+/*   Updated: 2026/07/18 19:20:49 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(const char *str, int c)
 {
 	int	i;
 
 	i = 0;
-	while (s[i] != '\0')
+	while (str[i] != '\0')
 	{
-		if (s[i] == (char)c)
-			return ((char *)s + i);
+		if (str[i] == (unsigned char)c)
+			return ((char *)&str[i]);
 		i++;
 	}
-	if ((char)c == '\0')
-		return ((char *)s + i);
-	return (0);
+	if (str[i] == ((unsigned char)c))
+		return ((char *)&str[i]);
+	return (NULL);
 }
-/*#include <string.h>
-int main (void)
-{
-	char s[] = "salut Rania";
-	int c = 't';
-
-	printf("%s\n", s);
-	printf("%s\n", ft_strchr(s, c));
-	printf("%s\n", ft_strchr(s, c));
-}*/

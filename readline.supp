@@ -1,0 +1,63 @@
+{
+   Readline Leak Suppression
+   Memcheck:Leak
+   ...
+   fun:readline
+   ...
+}
+{
+   Readline_History Leak Suppression
+   Memcheck:Leak
+   ...
+   fun:add_history
+   ...
+}
+{
+   Readline_Initialize_Leak Suppression
+   Memcheck:Leak
+   ...
+   fun:rl_initialize
+   ...
+}
+{
+   Readline_Keymap_Leak Suppression
+   Memcheck:Leak
+   ...
+   fun:rl_make_bare_keymap
+   ...
+}
+{
+   Readline_Keymap_Bind_Leak Suppression
+   Memcheck:Leak
+   ...
+   fun:rl_generic_bind
+   ...
+}
+{
+   Readline_Terminal_IO_Leak Suppression
+   Memcheck:Leak
+   ...
+   fun:_rl_init_terminal_io
+   ...
+}
+{
+   Readline_Terminfo_Leak Suppression
+   Memcheck:Leak
+   ...
+   fun:tgetent_sp
+   ...
+}
+{
+   Readline_Terminfo_Str_Leak Suppression
+   Memcheck:Leak
+   ...
+   fun:tgetstr_sp
+   ...
+}
+{
+   Readline_Parse_And_Bind_Leak Suppression
+   Memcheck:Leak
+   ...
+   fun:rl_parse_and_bind
+   ...
+}

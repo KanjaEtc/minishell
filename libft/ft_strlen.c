@@ -3,12 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ranoumba <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/08 18:11:43 by ranoumba          #+#    #+#             */
-/*   Updated: 2025/11/17 14:30:50 by ranoumba         ###   ########.fr       */
+/*   Created: 2025/11/10 13:57:30 by marotsen          #+#    #+#             */
+/*   Updated: 2026/07/17 17:20:54 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+//This function calculates the length of the string pointed to by str, 
+//excluding the terminating null byte.
 
 #include "libft.h"
 
@@ -17,12 +20,7 @@ size_t	ft_strlen(const char *str)
 	int	i;
 
 	i = 0;
-	while (str[i])
+	while (str[i] != '\0')
 		i++;
 	return (i);
 }
-/*
-int main (void)
-{
-	printf("%d", ft_strlen("salut"));
-}*/

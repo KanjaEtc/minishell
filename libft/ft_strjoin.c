@@ -1,31 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ranoumba <ranoumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/15 18:44:11 by marotsen          #+#    #+#             */
-/*   Updated: 2026/07/17 17:21:58 by ranoumba         ###   ########.fr       */
+/*   Created: 2025/11/13 21:23:26 by ranoumba          #+#    #+#             */
+/*   Updated: 2026/07/18 19:22:02 by ranoumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//This function copies up to siz - 1 characters from the string src to dst,
-//null-terminating the result if siz is not 0.
-
 #include "libft.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t siz)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	srclen;
+	char	*finalstr;
+	int		len1;
+	int		len2;
+	int		i;
+	int		j;
 
-	srclen = ft_strlen(src);
-	if (srclen + 1 < siz)
-		ft_memcpy(dst, src, srclen + 1);
-	else if (siz != 0)
-	{
-		ft_memcpy(dst, src, siz - 1);
-		dst[siz - 1] = 0;
-	}
-	return (srclen);
+	len1 = ft_strlen((char *)s1);
+	len2 = ft_strlen((char *)s2);
+	i = -1;
+	j = -1;
+	finalstr = malloc(sizeof(char) * (len1 + len2 + 1));
+	if (!finalstr)
+		return (0);
+	while (s1[++i])
+		finalstr[i] = s1[i];
+	while (s2[++j])
+		finalstr[i + j] = s2[j];
+	finalstr[i + j] = '\0';
+	return (finalstr);
 }
